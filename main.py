@@ -17,6 +17,14 @@ except ImportError:
 log_file = "cassandre.log"
 log_stream = open(log_file, "a", encoding="utf-8")
 
+# Force UTF-8 pour le terminal sur Windows
+if sys.platform == "win32":
+    try:
+        if hasattr(sys.stdout, "reconfigure"):
+            sys.stdout.reconfigure(encoding='utf-8')
+    except:
+        pass
+
 # On garde une référence au stdout original (terminal) pour les logs en direct
 _original_stdout = sys.stdout
 

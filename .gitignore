@@ -10,3 +10,6 @@ dist/
 *.app/
 data/
 *.db
+*.log
+*.csv
+.antigravity/

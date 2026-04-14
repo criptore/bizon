@@ -31,6 +31,7 @@ fi
 
 # 2. Exportation de configuration
 export PYTHONIOENCODING=utf-8
+export PYTHONUTF8=1
 
 # 3. Lancement de l'application
 echo "🚀 Lancement de Cassandre..."
