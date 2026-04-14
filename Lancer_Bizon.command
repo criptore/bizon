@@ -9,5 +9,9 @@ for PYTHON in /usr/local/bin/python3 /usr/bin/python3 python3; do
     command -v $PYTHON &>/dev/null && break
 done
 
-echo "==== Bizon — Lancement avec $PYTHON ===="
-$PYTHON test_app.py
+# Lancement de l'application en arrière-plan sans bloquer
+nohup $PYTHON test_app.py >/dev/null 2>&1 &
+
+# Ferme automatiquement la fenêtre du Terminal qui vient de s'ouvrir
+osascript -e 'tell application "Terminal" to tell front window to close' &
+exit
