@@ -56,11 +56,11 @@ def install_dependencies(log_fn):
     missing = [p for p in DEPS if not is_installed(p)]
 
     if not missing:
-        log_fn("✅ Toutes les dépendances sont déjà installées.\n")
+        log_fn("  ✅ Toutes les dépendances sont déjà installées.\n")
         return True
 
     for pkg in missing:
-        log_fn(f"📦 Installation de {pkg}...")
+        log_fn(f"  📦 Installation de {pkg}...")
         try:
             if pkg == "torch":
                 cmd = get_torch_install_cmd()
@@ -71,14 +71,19 @@ def install_dependencies(log_fn):
             if result.returncode == 0:
                 log_fn(f"   ✅ {pkg} installé avec succès.\n")
             else:
-                log_fn(f"   ❌ Erreur lors de l'installation de {pkg}:\n{result.stderr}\n")
-                return False
+                if pkg == "torch":
+                    log_fn(f"\n   ⚠️ Impossible d'installer torch. L'analyse GPU avancée sera ignorée.\n")
+                else:
+                    log_fn(f"\n   ❌ Erreur d'installation de {pkg}:\n{result.stderr}\n")
+                    return False
         except subprocess.TimeoutExpired:
-            log_fn(f"   ❌ Timeout — installation de {pkg} trop longue.\n")
-            return False
+            log_fn(f"\n   ❌ Timeout — installation de {pkg} trop longue.\n")
+            if pkg != "torch":
+                return False
         except Exception as e:
-            log_fn(f"   ❌ {e}\n")
-            return False
+            log_fn(f"\n   ❌ {e}\n")
+            if pkg != "torch":
+                return False
 
     return True
 
