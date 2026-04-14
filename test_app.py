@@ -1,22 +1,98 @@
-# test_app.py — Bizon Hardware Tester (standalone, no external imports from src/)
+# test_app.py — Bizon Hardware Tester
+# Standalone, cross-platform (Mac & Windows)
+# Auto-installs: psutil, torch on first click
 import sys
 import subprocess
 import importlib.util
-import json
 import platform
+import threading
 import tkinter as tk
 from tkinter import scrolledtext, font
 
 
-# ─── Auto-install psutil if missing ─────────────────────────────────────────
-def ensure_psutil():
-    if importlib.util.find_spec("psutil") is None:
-        subprocess.check_call([sys.executable, "-m", "pip", "install", "psutil"])
+# ─── Dependency installer ────────────────────────────────────────────────────
+
+DEPS = ["psutil", "torch"]
 
 
-# ─── Hardware detection (embedded — no src/ import needed) ──────────────────
-def detect_hardware():
+def is_installed(pkg):
+    """Check if a package is importable."""
+    return importlib.util.find_spec(pkg) is not None
+
+
+def get_torch_install_cmd():
+    """
+    Return the right pip command to install torch depending on platform.
+    - Windows + NVIDIA GPU → CUDA build
+    - Mac arm64            → default (includes MPS support)
+    - Everything else      → CPU-only build (smaller, faster to download)
+    """
+    system = platform.system()
+
+    if system == "Windows":
+        # Try to detect an NVIDIA GPU via nvidia-smi
+        try:
+            result = subprocess.run(
+                ["nvidia-smi"], capture_output=True, timeout=5
+            )
+            if result.returncode == 0:
+                # CUDA 12.1 build
+                return [
+                    sys.executable, "-m", "pip", "install", "--quiet",
+                    "torch",
+                    "--index-url", "https://download.pytorch.org/whl/cu121"
+                ]
+        except Exception:
+            pass
+        # CPU-only Windows
+        return [
+            sys.executable, "-m", "pip", "install", "--quiet",
+            "torch",
+            "--index-url", "https://download.pytorch.org/whl/cpu"
+        ]
+
+    # macOS or Linux — default pip (includes MPS for Apple Silicon)
+    return [sys.executable, "-m", "pip", "install", "--quiet", "torch"]
+
+
+def install_dependencies(log_fn):
+    """Install missing packages, calling log_fn(msg) for progress updates."""
+    missing = [p for p in DEPS if not is_installed(p)]
+
+    if not missing:
+        log_fn("✅ Toutes les dépendances sont déjà installées.\n")
+        return True
+
+    for pkg in missing:
+        log_fn(f"📦 Installation de {pkg}...")
+        try:
+            if pkg == "torch":
+                cmd = get_torch_install_cmd()
+            else:
+                cmd = [sys.executable, "-m", "pip", "install", "--quiet", pkg]
+
+            result = subprocess.run(cmd, capture_output=True, text=True, timeout=300)
+            if result.returncode == 0:
+                log_fn(f"   ✅ {pkg} installé avec succès.\n")
+            else:
+                log_fn(f"   ❌ Erreur lors de l'installation de {pkg}:\n{result.stderr}\n")
+                return False
+        except subprocess.TimeoutExpired:
+            log_fn(f"   ❌ Timeout — installation de {pkg} trop longue.\n")
+            return False
+        except Exception as e:
+            log_fn(f"   ❌ {e}\n")
+            return False
+
+    return True
+
+
+# ─── Hardware detection ───────────────────────────────────────────────────────
+
+def detect_hardware(log_fn):
     import psutil
+
+    log_fn("\n🔍 Analyse du matériel...\n")
 
     # OS
     os_info = {
@@ -33,8 +109,9 @@ def detect_hardware():
         if f and f.current > 0:
             freq_mhz = round(f.current, 1)
         elif platform.system() == "Darwin":
-            out = subprocess.check_output(["sysctl", "-n", "hw.cpufrequency"],
-                                          stderr=subprocess.DEVNULL).decode().strip()
+            out = subprocess.check_output(
+                ["sysctl", "-n", "hw.cpufrequency"], stderr=subprocess.DEVNULL
+            ).decode().strip()
             freq_mhz = round(int(out) / 1e6, 1)
     except Exception:
         pass
@@ -54,16 +131,30 @@ def detect_hardware():
         "percent_used": vm.percent,
     }
 
-    # GPU (torch optional)
-    gpu_info = {"device": "CPU (no GPU detected)", "details": None}
+    # GPU — reload torch in case it was just installed
+    gpu_info = {"device": "CPU (aucun GPU détecté)", "details": None}
     try:
-        import torch
+        import importlib
+        torch = importlib.import_module("torch")
         if torch.cuda.is_available():
-            gpu_info = {"device": "CUDA (NVIDIA GPU)", "details": torch.cuda.get_device_name(0)}
+            name = torch.cuda.get_device_name(0)
+            vram = round(torch.cuda.get_device_properties(0).total_memory / 1024**3, 1)
+            gpu_info = {
+                "device": f"CUDA — {name}",
+                "vram_gb": vram,
+                "cuda_version": torch.version.cuda,
+            }
+            log_fn(f"   🎮 GPU NVIDIA détecté : {name}\n")
         elif hasattr(torch.backends, "mps") and torch.backends.mps.is_available():
-            gpu_info = {"device": "MPS (Apple Silicon GPU)", "details": "Metal Performance Shaders"}
-    except ImportError:
-        gpu_info["details"] = "torch non installé — GPU non vérifié"
+            gpu_info = {
+                "device": "MPS — Apple Silicon GPU",
+                "details": "Metal Performance Shaders (GPU intégré)",
+            }
+            log_fn("   🍎 GPU Apple Silicon (MPS) détecté\n")
+        else:
+            log_fn("   ℹ️  Aucun GPU compatible détecté (CUDA ou MPS)\n")
+    except Exception as e:
+        gpu_info["details"] = f"torch importé mais erreur : {e}"
 
     # Python
     py_info = {
@@ -71,7 +162,7 @@ def detect_hardware():
         "executable": sys.executable,
     }
 
-    # Adaptation profile
+    # Bizon adaptation profile
     ram_gb = ram_info["total_gb"]
     gpu = gpu_info["device"]
     cores = cpu_info["cores_physical"] or 2
@@ -100,72 +191,123 @@ def detect_hardware():
     }
 
 
-# ─── GUI ─────────────────────────────────────────────────────────────────────
-DARK_BG    = "#0d1117"
-CARD_BG    = "#161b22"
-ACCENT     = "#00d4aa"
-ACCENT2    = "#00a8ff"
-TEXT_MAIN  = "#e6edf3"
-TEXT_DIM   = "#8b949e"
-BTN_HOVER  = "#00b890"
-ERROR_CLR  = "#ff4d4d"
+def format_report(report):
+    lines = []
+    lines.append("╔══════════════════════════════════════╗")
+    lines.append("║      BIZON — Rapport Matériel        ║")
+    lines.append("╚══════════════════════════════════════╝\n")
 
+    labels = {
+        "os": "Système d'exploitation",
+        "cpu": "CPU",
+        "ram": "RAM",
+        "gpu": "GPU / Accélérateur",
+        "python": "Python",
+        "adaptation_bizon": "Profil Bizon adapté",
+    }
 
-def run_detection(output_widget, btn, status_lbl):
-    btn.config(state=tk.DISABLED, text="🔍 Analyse en cours...")
-    status_lbl.config(text="Analyse du matériel...", fg=ACCENT)
-    output_widget.config(state=tk.NORMAL)
-    output_widget.delete(1.0, tk.END)
-    output_widget.update()
-
-    try:
-        ensure_psutil()
-        report = detect_hardware()
-
-        # Pretty print
-        lines = []
-        lines.append("╔══════════════════════════════════════╗")
-        lines.append("║      BIZON — Rapport Matériel        ║")
-        lines.append("╚══════════════════════════════════════╝\n")
-
-        def section(title, data):
-            lines.append(f"▶ {title}")
-            lines.append("─" * 40)
+    for key, title in labels.items():
+        data = report.get(key, {})
+        lines.append(f"▶ {title}")
+        lines.append("─" * 44)
+        if isinstance(data, dict):
             for k, v in data.items():
-                lines.append(f"  {k:<22} {v}")
-            lines.append("")
+                lines.append(f"  {k:<24} {v}")
+        else:
+            lines.append(f"  {data}")
+        lines.append("")
 
-        section("Système d'exploitation", report["os"])
-        section("CPU", report["cpu"])
-        section("RAM", report["ram"])
-        section("GPU / Accélérateur", report["gpu"])
-        section("Python", report["python"])
-        section("Profil Bizon adapté", report["adaptation_bizon"])
+    lines.append("─" * 44)
+    lines.append("✅ Détection terminée avec succès.")
+    return "\n".join(lines)
 
-        lines.append("─" * 40)
-        lines.append("✅ Détection terminée avec succès.")
 
-        output_widget.insert(tk.END, "\n".join(lines))
-        status_lbl.config(text="✅ Détection terminée", fg=ACCENT)
+# ─── GUI ─────────────────────────────────────────────────────────────────────
 
+DARK_BG  = "#0d1117"
+CARD_BG  = "#161b22"
+ACCENT   = "#00d4aa"
+TEXT     = "#e6edf3"
+TEXT_DIM = "#8b949e"
+BTN_ACT  = "#00b890"
+ERR      = "#ff4d4d"
+WARN     = "#f0a500"
+
+
+def append(widget, text, color=None):
+    """Thread-safe append to ScrolledText."""
+    def _do():
+        widget.config(state=tk.NORMAL)
+        widget.insert(tk.END, text)
+        widget.see(tk.END)
+        widget.config(state=tk.DISABLED)
+    widget.after(0, _do)
+
+
+def set_status(lbl, text, color):
+    lbl.after(0, lambda: lbl.config(text=text, fg=color))
+
+
+def set_btn(btn, text, state):
+    btn.after(0, lambda: btn.config(text=text, state=state))
+
+
+def clear(widget):
+    def _do():
+        widget.config(state=tk.NORMAL)
+        widget.delete(1.0, tk.END)
+        widget.config(state=tk.DISABLED)
+    widget.after(0, _do)
+
+
+def run_pipeline(output, btn, status_lbl):
+    """Full pipeline: install deps → detect hardware. Runs in a thread."""
+    clear(output)
+    set_status(status_lbl, "⏳ Vérification des dépendances...", WARN)
+    set_btn(btn, "⏳ En cours...", tk.DISABLED)
+
+    def log(msg):
+        append(output, msg)
+
+    log("══════════════════════════════════════\n")
+    log("  BIZON — Initialisation\n")
+    log("══════════════════════════════════════\n\n")
+
+    # Step 1 — install
+    log("📋 Vérification des dépendances...\n")
+    ok = install_dependencies(log)
+
+    if not ok:
+        set_status(status_lbl, "❌ Erreur d'installation", ERR)
+        set_btn(btn, "🚀 Lancer la Détection", tk.NORMAL)
+        return
+
+    # Step 2 — detect
+    set_status(status_lbl, "🔍 Analyse du matériel...", WARN)
+    try:
+        report = detect_hardware(log)
+        log("\n")
+        log(format_report(report))
+        set_status(status_lbl, "✅ Détection terminée", ACCENT)
     except Exception as e:
-        output_widget.insert(tk.END, f"❌ Erreur : {e}")
-        status_lbl.config(text="❌ Erreur pendant la détection", fg=ERROR_CLR)
+        log(f"\n❌ Erreur lors de la détection : {e}\n")
+        set_status(status_lbl, "❌ Erreur lors de la détection", ERR)
 
-    output_widget.config(state=tk.DISABLED)
-    btn.config(state=tk.NORMAL, text="🚀 Lancer la Détection")
+    set_btn(btn, "🚀 Lancer la Détection", tk.NORMAL)
+
+
+def on_button_click(output, btn, status_lbl):
+    t = threading.Thread(target=run_pipeline, args=(output, btn, status_lbl), daemon=True)
+    t.start()
 
 
 def main():
     root = tk.Tk()
     root.title("Bizon — Test Matériel")
-    root.geometry("680x620")
-    root.resizable(False, False)
+    root.geometry("700x650")
+    root.resizable(True, True)
     root.configure(bg=DARK_BG)
-
-    # ── Header ──
-    header = tk.Frame(root, bg=DARK_BG)
-    header.pack(fill=tk.X, padx=25, pady=(25, 5))
+    root.minsize(600, 500)
 
     title_font = font.Font(family="Helvetica", size=20, weight="bold")
     sub_font   = font.Font(family="Helvetica", size=11)
@@ -173,18 +315,20 @@ def main():
     btn_font   = font.Font(family="Helvetica", size=13, weight="bold")
     small_font = font.Font(family="Helvetica", size=10)
 
+    # Header
+    header = tk.Frame(root, bg=DARK_BG)
+    header.pack(fill=tk.X, padx=25, pady=(25, 5))
     tk.Label(header, text="🦬 Bizon", font=title_font, fg=ACCENT, bg=DARK_BG).pack(anchor="w")
     tk.Label(header, text="Détection locale du matériel & adaptation des paramètres",
              font=sub_font, fg=TEXT_DIM, bg=DARK_BG).pack(anchor="w")
 
-    # ── Divider ──
     tk.Frame(root, height=1, bg=ACCENT, bd=0).pack(fill=tk.X, padx=25, pady=8)
 
-    # ── Status label ──
+    # Status
     status_lbl = tk.Label(root, text="En attente…", font=small_font, fg=TEXT_DIM, bg=DARK_BG)
     status_lbl.pack(anchor="w", padx=25)
 
-    # ── Button ──
+    # Button
     btn_frame = tk.Frame(root, bg=DARK_BG)
     btn_frame.pack(fill=tk.X, padx=25, pady=10)
 
@@ -193,38 +337,36 @@ def main():
         text="🚀 Lancer la Détection",
         font=btn_font,
         bg=ACCENT, fg="#0d1117",
-        activebackground=BTN_HOVER,
+        activebackground=BTN_ACT,
         relief=tk.FLAT,
         padx=20, pady=10,
-        cursor="hand2",
-        bd=0,
+        cursor="hand2", bd=0,
     )
     btn.pack(side=tk.LEFT)
-    btn.config(command=lambda: run_detection(output_txt, btn, status_lbl))
 
-    # ── Output text area ──
+    # Output
     output_frame = tk.Frame(root, bg=CARD_BG, bd=0)
-    output_frame.pack(fill=tk.BOTH, expand=True, padx=25, pady=(0, 20))
+    output_frame.pack(fill=tk.BOTH, expand=True, padx=25, pady=(0, 10))
 
     output_txt = scrolledtext.ScrolledText(
         output_frame,
         font=mono_font,
-        bg=CARD_BG,
-        fg=TEXT_MAIN,
-        insertbackground=TEXT_MAIN,
+        bg=CARD_BG, fg=TEXT,
+        insertbackground=TEXT,
         relief=tk.FLAT,
-        padx=14,
-        pady=10,
+        padx=14, pady=10,
         wrap=tk.NONE,
         state=tk.DISABLED,
     )
     output_txt.pack(fill=tk.BOTH, expand=True)
-    output_txt.config(state=tk.NORMAL)
-    output_txt.insert(tk.END, "Cliquez sur le bouton ci-dessus pour analyser cette machine.\n"
-                              "psutil sera installé automatiquement si absente.")
-    output_txt.config(state=tk.DISABLED)
+    append(output_txt,
+           "Cliquez sur le bouton pour détecter le matériel.\n"
+           "Les dépendances (psutil, torch) seront installées automatiquement si nécessaire.\n"
+           "torch permet la détection GPU (CUDA pour NVIDIA, MPS pour Apple Silicon).\n")
 
-    # ── Footer ──
+    btn.config(command=lambda: on_button_click(output_txt, btn, status_lbl))
+
+    # Footer
     tk.Label(root, text="Projet Olympus — Module Bizon · ECE Paris 2026",
              font=small_font, fg=TEXT_DIM, bg=DARK_BG).pack(pady=(0, 8))
 
