@@ -14,7 +14,9 @@ plotly>=5.18.0
 pywebview; sys_platform == "win32" or sys_platform == "darwin"
 
 # Compatibility Fixes
+Jinja2>=3.1.5           # Python 3.14 : dict key hashability fix dans LRUCache
 huggingface-hub<0.26.0
+audioop-lts>=0.2.1; python_version >= "3.13"   # audioop retiré en Python 3.13+
 
 # Optional GPU acceleration (heavy — install manually if needed)
 # torch>=2.0.0

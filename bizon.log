@@ -1281,3 +1281,1020 @@ ModuleNotFoundError: No module named 'webview'
 2026-04-14 20:20:36,866 - hardware_detector - INFO - Starting local hardware detection...
 2026-04-14 20:20:36,888 - BizonMain - INFO - Démarrage de l'interface de contrôle...
 2026-04-14 20:25:00,030 - BizonMain - INFO - Démarrage de l'interface de contrôle...
+2026-04-14 21:05:32,132 - BizonMain - INFO - Démarrage de l'interface de contrôle...
+2026-04-14 21:10:55,762 - BizonMain - INFO - Démarrage de l'interface de contrôle...
+2026-04-14 21:18:19,198 - BizonMain - INFO - Démarrage de l'interface de contrôle...
+2026-04-14 21:18:19,842 - hardware_detector - INFO - Starting local hardware detection...
+2026-04-14 21:18:24,169 - BizonMain - INFO - Signal de lancement du terminal reçu.
+2026-04-14 21:18:24,174 - BizonMain - INFO - Démarrage du Terminal de Trading (processus isolé)...
+2026-04-14 21:18:58,929 - BizonMain - INFO - Démarrage de l'interface de contrôle...
+2026-04-14 21:18:59,320 - hardware_detector - INFO - Starting local hardware detection...
+2026-04-14 21:20:54,876 - BizonMain - INFO - Démarrage de l'interface de contrôle...
+2026-04-14 21:20:55,174 - hardware_detector - INFO - Starting local hardware detection...
+2026-04-14 21:21:09,241 - BizonMain - INFO - Signal de lancement du terminal reçu.
+2026-04-14 21:21:09,246 - BizonMain - INFO - Démarrage du Terminal de Trading (processus isolé)...
+2026-04-14 21:21:14,541 - httpx - INFO - HTTP Request: GET https://api.gradio.app/gradio-messaging/en "HTTP/1.1 200 OK"
+--- Logging error ---
+Traceback (most recent call last):
+  File "/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/logging/__init__.py", line 1154, in emit
+    stream.write(msg + self.terminator)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+OSError: [Errno 5] Input/output error
+Call stack:
+  File "/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/threading.py", line 1043, in _bootstrap
+    self._bootstrap_inner()
+  File "/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/threading.py", line 1081, in _bootstrap_inner
+    self._context.run(self.run)
+  File "/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/threading.py", line 1023, in run
+    self._target(*self._args, **self._kwargs)
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/gradio/strings.py", line 33, in get_updated_messaging
+    updated_messaging = httpx.get(MESSAGING_API_ENDPOINT, timeout=3).json()
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/httpx/_api.py", line 195, in get
+    return request(
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/httpx/_api.py", line 109, in request
+    return client.request(
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/httpx/_client.py", line 825, in request
+    return self.send(request, auth=auth, follow_redirects=follow_redirects)
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/httpx/_client.py", line 914, in send
+    response = self._send_handling_auth(
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/httpx/_client.py", line 942, in _send_handling_auth
+    response = self._send_handling_redirects(
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/httpx/_client.py", line 979, in _send_handling_redirects
+    response = self._send_single_request(request)
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/httpx/_client.py", line 1025, in _send_single_request
+    logger.info(
+Message: 'HTTP Request: %s %s "%s %d %s"'
+Arguments: ('GET', URL('https://api.gradio.app/gradio-messaging/en'), 'HTTP/1.1', 200, 'OK')
+2026-04-14 21:21:20,183 - bizon_config - INFO - ⚡ Initialisation du contexte Hardware Bizon...
+--- Logging error ---
+Traceback (most recent call last):
+  File "/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/logging/__init__.py", line 1154, in emit
+    stream.write(msg + self.terminator)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+OSError: [Errno 5] Input/output error
+Call stack:
+  File "<string>", line 1, in <module>
+    import sys, logging;log = open('bizon.log', 'a', encoding='utf-8');term = open('/dev/tty', 'w', encoding='utf-8', errors='replace');sys.stdout = log; sys.stderr = log;logging.basicConfig(level=logging.INFO,  format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',  handlers=[logging.StreamHandler(log), logging.StreamHandler(term)]);sys.path.insert(0, '.');from src.ui.dashboard import launch_dashboard;launch_dashboard(standalone=True)
+  File "<frozen importlib._bootstrap>", line 1371, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1342, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 938, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 762, in exec_module
+  File "<frozen importlib._bootstrap>", line 491, in _call_with_frames_removed
+  File "/Users/joshua/Desktop/bizon/src/ui/dashboard.py", line 11, in <module>
+    from src.datafeed import DataFetcher
+  File "<frozen importlib._bootstrap>", line 1371, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1342, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 938, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 762, in exec_module
+  File "<frozen importlib._bootstrap>", line 491, in _call_with_frames_removed
+  File "/Users/joshua/Desktop/bizon/src/datafeed/__init__.py", line 1, in <module>
+    from .fetcher import DataFetcher
+  File "<frozen importlib._bootstrap>", line 1371, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1342, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 938, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 762, in exec_module
+  File "<frozen importlib._bootstrap>", line 491, in _call_with_frames_removed
+  File "/Users/joshua/Desktop/bizon/src/datafeed/fetcher.py", line 6, in <module>
+    from src.config import config
+  File "<frozen importlib._bootstrap>", line 1371, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1342, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 938, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 762, in exec_module
+  File "<frozen importlib._bootstrap>", line 491, in _call_with_frames_removed
+  File "/Users/joshua/Desktop/bizon/src/config.py", line 38, in <module>
+    config = BizonConfig()
+  File "/Users/joshua/Desktop/bizon/src/config.py", line 16, in __new__
+    cls._instance._initialize()
+  File "/Users/joshua/Desktop/bizon/src/config.py", line 20, in _initialize
+    logger.info("⚡ Initialisation du contexte Hardware Bizon...")
+Message: '⚡ Initialisation du contexte Hardware Bizon...'
+Arguments: ()
+2026-04-14 21:21:20,185 - hardware_detector - INFO - Starting local hardware detection...
+--- Logging error ---
+Traceback (most recent call last):
+  File "/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/logging/__init__.py", line 1154, in emit
+    stream.write(msg + self.terminator)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+OSError: [Errno 5] Input/output error
+Call stack:
+  File "<string>", line 1, in <module>
+    import sys, logging;log = open('bizon.log', 'a', encoding='utf-8');term = open('/dev/tty', 'w', encoding='utf-8', errors='replace');sys.stdout = log; sys.stderr = log;logging.basicConfig(level=logging.INFO,  format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',  handlers=[logging.StreamHandler(log), logging.StreamHandler(term)]);sys.path.insert(0, '.');from src.ui.dashboard import launch_dashboard;launch_dashboard(standalone=True)
+  File "<frozen importlib._bootstrap>", line 1371, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1342, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 938, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 762, in exec_module
+  File "<frozen importlib._bootstrap>", line 491, in _call_with_frames_removed
+  File "/Users/joshua/Desktop/bizon/src/ui/dashboard.py", line 11, in <module>
+    from src.datafeed import DataFetcher
+  File "<frozen importlib._bootstrap>", line 1371, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1342, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 938, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 762, in exec_module
+  File "<frozen importlib._bootstrap>", line 491, in _call_with_frames_removed
+  File "/Users/joshua/Desktop/bizon/src/datafeed/__init__.py", line 1, in <module>
+    from .fetcher import DataFetcher
+  File "<frozen importlib._bootstrap>", line 1371, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1342, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 938, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 762, in exec_module
+  File "<frozen importlib._bootstrap>", line 491, in _call_with_frames_removed
+  File "/Users/joshua/Desktop/bizon/src/datafeed/fetcher.py", line 6, in <module>
+    from src.config import config
+  File "<frozen importlib._bootstrap>", line 1371, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1342, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 938, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 762, in exec_module
+  File "<frozen importlib._bootstrap>", line 491, in _call_with_frames_removed
+  File "/Users/joshua/Desktop/bizon/src/config.py", line 38, in <module>
+    config = BizonConfig()
+  File "/Users/joshua/Desktop/bizon/src/config.py", line 16, in __new__
+    cls._instance._initialize()
+  File "/Users/joshua/Desktop/bizon/src/config.py", line 21, in _initialize
+    self.hw_report = detect_hardware()
+  File "/Users/joshua/Desktop/bizon/src/hardware/detector.py", line 102, in detect_hardware
+    logger.info("Starting local hardware detection...")
+Message: 'Starting local hardware detection...'
+Arguments: ()
+2026-04-14 21:21:20,353 - BizonDashboard - WARNING - Gradio launch warning: Cannot find empty port in range: 7860-7860. You can specify a different port by setting the GRADIO_SERVER_PORT environment variable or passing the `server_port` parameter to `launch()`. — tentative sur port 7860
+--- Logging error ---
+Traceback (most recent call last):
+  File "/Users/joshua/Desktop/bizon/src/ui/dashboard.py", line 176, in launch_dashboard
+    _, launched_url, _ = demo.launch(
+                         ~~~~~~~~~~~^
+        share=False,
+        ^^^^^^^^^^^^
+    ...<5 lines>...
+        quiet=True
+        ^^^^^^^^^^
+    )
+    ^
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/gradio/blocks.py", line 2371, in launch
+    ) = http_server.start_server(
+        ~~~~~~~~~~~~~~~~~~~~~~~~^
+        app=self.app,
+        ^^^^^^^^^^^^^
+    ...<4 lines>...
+        ssl_keyfile_password=ssl_keyfile_password,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/gradio/http_server.py", line 154, in start_server
+    raise OSError(
+        f"Cannot find empty port in range: {min(server_ports)}-{max(server_ports)}. You can specify a different port by setting the GRADIO_SERVER_PORT environment variable or passing the `server_port` parameter to `launch()`."
+    )
+OSError: Cannot find empty port in range: 7860-7860. You can specify a different port by setting the GRADIO_SERVER_PORT environment variable or passing the `server_port` parameter to `launch()`.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/logging/__init__.py", line 1154, in emit
+    stream.write(msg + self.terminator)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+OSError: [Errno 5] Input/output error
+Call stack:
+  File "<string>", line 1, in <module>
+    import sys, logging;log = open('bizon.log', 'a', encoding='utf-8');term = open('/dev/tty', 'w', encoding='utf-8', errors='replace');sys.stdout = log; sys.stderr = log;logging.basicConfig(level=logging.INFO,  format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',  handlers=[logging.StreamHandler(log), logging.StreamHandler(term)]);sys.path.insert(0, '.');from src.ui.dashboard import launch_dashboard;launch_dashboard(standalone=True)
+  File "/Users/joshua/Desktop/bizon/src/ui/dashboard.py", line 188, in launch_dashboard
+    logger.warning(f"Gradio launch warning: {e} — tentative sur port 7860")
+Message: 'Gradio launch warning: Cannot find empty port in range: 7860-7860. You can specify a different port by setting the GRADIO_SERVER_PORT environment variable or passing the `server_port` parameter to `launch()`. — tentative sur port 7860'
+Arguments: ()
+2026-04-14 21:21:20,505 - httpx - INFO - HTTP Request: GET https://checkip.amazonaws.com/ "HTTP/1.1 200 "
+--- Logging error ---
+Traceback (most recent call last):
+  File "/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/logging/__init__.py", line 1154, in emit
+    stream.write(msg + self.terminator)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+OSError: [Errno 5] Input/output error
+Call stack:
+  File "/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/threading.py", line 1043, in _bootstrap
+    self._bootstrap_inner()
+  File "/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/threading.py", line 1081, in _bootstrap_inner
+    self._context.run(self.run)
+  File "/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/threading.py", line 1023, in run
+    self._target(*self._args, **self._kwargs)
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/gradio/analytics.py", line 70, in _do_normal_analytics_request
+    data["ip_address"] = get_local_ip_address()
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/gradio/analytics.py", line 131, in get_local_ip_address
+    ip_address = httpx.get(
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/httpx/_api.py", line 195, in get
+    return request(
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/httpx/_api.py", line 109, in request
+    return client.request(
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/httpx/_client.py", line 825, in request
+    return self.send(request, auth=auth, follow_redirects=follow_redirects)
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/httpx/_client.py", line 914, in send
+    response = self._send_handling_auth(
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/httpx/_client.py", line 942, in _send_handling_auth
+    response = self._send_handling_redirects(
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/httpx/_client.py", line 979, in _send_handling_redirects
+    response = self._send_single_request(request)
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/httpx/_client.py", line 1025, in _send_single_request
+    logger.info(
+Message: 'HTTP Request: %s %s "%s %d %s"'
+Arguments: ('GET', URL('https://checkip.amazonaws.com/'), 'HTTP/1.1', 200, '')
+2026-04-14 21:21:21,044 - httpx - INFO - HTTP Request: GET https://api.gradio.app/pkg-version "HTTP/1.1 200 OK"
+--- Logging error ---
+Traceback (most recent call last):
+  File "/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/logging/__init__.py", line 1154, in emit
+    stream.write(msg + self.terminator)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+OSError: [Errno 5] Input/output error
+Call stack:
+  File "/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/threading.py", line 1043, in _bootstrap
+    self._bootstrap_inner()
+  File "/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/threading.py", line 1081, in _bootstrap_inner
+    self._context.run(self.run)
+  File "/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/threading.py", line 1023, in run
+    self._target(*self._args, **self._kwargs)
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/gradio/analytics.py", line 104, in version_check
+    latest_pkg_version = httpx.get(url=PKG_VERSION_URL, timeout=3).json()["version"]
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/httpx/_api.py", line 195, in get
+    return request(
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/httpx/_api.py", line 109, in request
+    return client.request(
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/httpx/_client.py", line 825, in request
+    return self.send(request, auth=auth, follow_redirects=follow_redirects)
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/httpx/_client.py", line 914, in send
+    response = self._send_handling_auth(
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/httpx/_client.py", line 942, in _send_handling_auth
+    response = self._send_handling_redirects(
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/httpx/_client.py", line 979, in _send_handling_redirects
+    response = self._send_single_request(request)
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/httpx/_client.py", line 1025, in _send_single_request
+    logger.info(
+Message: 'HTTP Request: %s %s "%s %d %s"'
+Arguments: ('GET', URL('https://api.gradio.app/pkg-version'), 'HTTP/1.1', 200, 'OK')
+2026-04-14 21:21:26,742 - BizonDashboard - ERROR - Serveur Gradio inaccessible après 6s. Abandon.
+2026-04-14 21:29:36,556 - BizonMain - INFO - Démarrage de l'interface de contrôle...
+2026-04-14 21:29:36,856 - hardware_detector - INFO - Starting local hardware detection...
+2026-04-14 21:29:40,036 - BizonMain - INFO - Signal de lancement du terminal reçu.
+2026-04-14 21:29:40,036 - BizonMain - INFO - Démarrage du Terminal de Trading (processus isolé)...
+2026-04-14 21:29:40,059 - BizonMain - INFO - Dashboard en cours — terminal maintenu ouvert (Ctrl+C pour quitter).
+2026-04-14 21:29:43,919 - httpx - INFO - HTTP Request: GET https://api.gradio.app/gradio-messaging/en "HTTP/1.1 200 OK"
+2026-04-14 21:29:50,615 - bizon_config - INFO - ⚡ Initialisation du contexte Hardware Bizon...
+2026-04-14 21:29:50,615 - hardware_detector - INFO - Starting local hardware detection...
+2026-04-14 21:29:50,724 - httpx - INFO - HTTP Request: GET https://checkip.amazonaws.com/ "HTTP/1.1 200 "
+2026-04-14 21:29:50,783 - BizonDashboard - WARNING - Gradio launch warning: Cannot find empty port in range: 7860-7860. You can specify a different port by setting the GRADIO_SERVER_PORT environment variable or passing the `server_port` parameter to `launch()`. — tentative sur port 7860
+2026-04-14 21:29:50,804 - BizonDashboard - INFO - Ouverture App Bizon (Mac) → http://127.0.0.1:7860
+2026-04-14 21:29:51,757 - httpx - INFO - HTTP Request: GET https://api.gradio.app/pkg-version "HTTP/1.1 200 OK"
+2026-04-14 21:32:53,650 - BizonMain - INFO - Démarrage de l'interface de contrôle...
+2026-04-14 21:32:54,066 - hardware_detector - INFO - Starting local hardware detection...
+2026-04-14 21:32:58,181 - BizonMain - INFO - Signal de lancement du terminal reçu.
+2026-04-14 21:32:58,181 - BizonMain - INFO - Démarrage du Terminal de Trading (processus isolé)...
+2026-04-14 21:32:58,196 - BizonMain - INFO - Dashboard en cours — terminal maintenu ouvert (Ctrl+C pour quitter).
+2026-04-14 21:33:01,926 - httpx - INFO - HTTP Request: GET https://api.gradio.app/gradio-messaging/en "HTTP/1.1 200 OK"
+2026-04-14 21:33:08,027 - bizon_config - INFO - ⚡ Initialisation du contexte Hardware Bizon...
+2026-04-14 21:33:08,028 - hardware_detector - INFO - Starting local hardware detection...
+2026-04-14 21:33:08,144 - httpx - INFO - HTTP Request: GET https://checkip.amazonaws.com/ "HTTP/1.1 200 "
+2026-04-14 21:33:08,218 - httpx - INFO - HTTP Request: GET http://127.0.0.1:7860/startup-events "HTTP/1.1 200 OK"
+2026-04-14 21:33:08,219 - BizonDashboard - INFO - URL Gradio : http://127.0.0.1:7860
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/uvicorn/protocols/http/h11_impl.py", line 415, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self.scope, self.receive, self.send
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/fastapi/applications.py", line 1163, in __call__
+    await super().__call__(scope, receive, send)
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/starlette/applications.py", line 90, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/gradio/route_utils.py", line 761, in __call__
+    await self.app(scope, receive, send)
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/starlette/routing.py", line 660, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/starlette/routing.py", line 680, in app
+    await route.handle(scope, receive, send)
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/starlette/routing.py", line 276, in handle
+    await self.app(scope, receive, send)
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/fastapi/routing.py", line 134, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/fastapi/routing.py", line 120, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/fastapi/routing.py", line 674, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/fastapi/routing.py", line 330, in run_endpoint_function
+    return await run_in_threadpool(dependant.call, **values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/starlette/concurrency.py", line 32, in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/anyio/to_thread.py", line 63, in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        func, args, abandon_on_cancel=abandon_on_cancel, limiter=limiter
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/anyio/_backends/_asyncio.py", line 2518, in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/anyio/_backends/_asyncio.py", line 1002, in run
+    result = context.run(func, *args)
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/gradio/routes.py", line 432, in main
+    return templates.TemplateResponse(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        template,
+        ^^^^^^^^^
+    ...<4 lines>...
+        },
+        ^^
+    )
+    ^
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/starlette/templating.py", line 148, in TemplateResponse
+    template = self.get_template(name)
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/starlette/templating.py", line 115, in get_template
+    return self.env.get_template(name)
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/jinja2/environment.py", line 1016, in get_template
+    return self._load_template(name, globals)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/jinja2/environment.py", line 975, in _load_template
+    template = self.loader.load(self, name, self.make_globals(globals))
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/jinja2/loaders.py", line 126, in load
+    source, filename, uptodate = self.get_source(environment, name)
+                                 ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/jinja2/loaders.py", line 197, in get_source
+    pieces = split_template_path(template)
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/jinja2/loaders.py", line 30, in split_template_path
+    for piece in template.split("/"):
+                 ^^^^^^^^^^^^^^
+AttributeError: 'dict' object has no attribute 'split'
+2026-04-14 21:33:08,232 - BizonDashboard - INFO - Ouverture App Bizon (Mac) → http://127.0.0.1:7860
+2026-04-14 21:33:08,916 - httpx - INFO - HTTP Request: GET https://api.gradio.app/pkg-version "HTTP/1.1 200 OK"
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/uvicorn/protocols/http/h11_impl.py", line 415, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self.scope, self.receive, self.send
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/fastapi/applications.py", line 1163, in __call__
+    await super().__call__(scope, receive, send)
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/starlette/applications.py", line 90, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/gradio/route_utils.py", line 761, in __call__
+    await self.app(scope, receive, send)
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/starlette/routing.py", line 660, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/starlette/routing.py", line 680, in app
+    await route.handle(scope, receive, send)
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/starlette/routing.py", line 276, in handle
+    await self.app(scope, receive, send)
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/fastapi/routing.py", line 134, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/fastapi/routing.py", line 120, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/fastapi/routing.py", line 674, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/fastapi/routing.py", line 330, in run_endpoint_function
+    return await run_in_threadpool(dependant.call, **values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/starlette/concurrency.py", line 32, in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/anyio/to_thread.py", line 63, in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        func, args, abandon_on_cancel=abandon_on_cancel, limiter=limiter
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/anyio/_backends/_asyncio.py", line 2518, in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/anyio/_backends/_asyncio.py", line 1002, in run
+    result = context.run(func, *args)
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/gradio/routes.py", line 432, in main
+    return templates.TemplateResponse(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        template,
+        ^^^^^^^^^
+    ...<4 lines>...
+        },
+        ^^
+    )
+    ^
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/starlette/templating.py", line 148, in TemplateResponse
+    template = self.get_template(name)
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/starlette/templating.py", line 115, in get_template
+    return self.env.get_template(name)
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/jinja2/environment.py", line 1016, in get_template
+    return self._load_template(name, globals)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/jinja2/environment.py", line 975, in _load_template
+    template = self.loader.load(self, name, self.make_globals(globals))
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/jinja2/loaders.py", line 126, in load
+    source, filename, uptodate = self.get_source(environment, name)
+                                 ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/jinja2/loaders.py", line 197, in get_source
+    pieces = split_template_path(template)
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/jinja2/loaders.py", line 30, in split_template_path
+    for piece in template.split("/"):
+                 ^^^^^^^^^^^^^^
+AttributeError: 'dict' object has no attribute 'split'
+2026-04-14 21:39:25,562 - BizonMain - INFO - [SYSTEM] Démarrage de l'interface de contrôle...
+2026-04-14 21:39:25,919 - LauncherUI - INFO - [HARDWARE] Lancement de la détection...
+2026-04-14 21:39:25,928 - hardware_detector - INFO - Starting local hardware detection...
+2026-04-14 21:39:25,929 - LauncherUI - INFO - [HARDWARE] Détection terminée : Darwin | 10 cores
+2026-04-14 21:39:25,929 - LauncherUI - INFO - [UI] Mise à jour du rapport matériel sur l'interface.
+2026-04-14 21:39:27,568 - BizonMain - INFO - [UI] Signal de lancement du terminal reçu depuis LauncherUI.
+2026-04-14 21:39:27,569 - BizonMain - INFO - [PROCESS] Démarrage du Terminal de Trading (processus isolé)...
+2026-04-14 21:39:27,592 - BizonMain - INFO - [SYSTEM] Dashboard en cours — terminal maintenu ouvert (Ctrl+C pour quitter).
+Traceback (most recent call last):
+  File "/Users/joshua/Desktop/bizon/src/ui/dashboard.py", line 26, in <module>
+    logging.getLogger("BizonDashboard").info("[SYSTEM] Correctif de compatibilité Python 3.14 appliqué (Jinja2).")
+    ^^^^^^^
+NameError: name 'logging' is not defined. Did you forget to import 'logging'?
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+    import sys, logging;log = open('bizon.log', 'a', encoding='utf-8');sys.stdout = log; sys.stderr = log;logging.basicConfig(level=logging.INFO,  format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',  handlers=[logging.StreamHandler(log)]);sys.path.insert(0, '.');from src.ui.dashboard import launch_dashboard;launch_dashboard(standalone=True)
+                                                                                                                                                                                                                                                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/joshua/Desktop/bizon/src/ui/dashboard.py", line 28, in <module>
+    logging.getLogger("BizonDashboard").warning(f"[SYSTEM] Échec de l'application du correctif Python 3.14 : {e}")
+    ^^^^^^^
+NameError: name 'logging' is not defined. Did you forget to import 'logging'?
+2026-04-14 21:39:30,948 - BizonMain - INFO - [SYSTEM] Dashboard fermé.
+2026-04-14 21:42:11,968 - BizonMain - INFO - [SYSTEM] Démarrage de l'interface de contrôle...
+2026-04-14 21:42:12,277 - LauncherUI - INFO - [HARDWARE] Lancement de la détection...
+2026-04-14 21:42:12,286 - hardware_detector - INFO - Starting local hardware detection...
+2026-04-14 21:42:12,287 - LauncherUI - INFO - [HARDWARE] Détection terminée : Darwin | 10 cores
+2026-04-14 21:42:12,287 - LauncherUI - INFO - [UI] Mise à jour du rapport matériel sur l'interface.
+2026-04-14 21:42:18,334 - BizonMain - INFO - [UI] Signal de lancement du terminal reçu depuis LauncherUI.
+2026-04-14 21:42:18,334 - BizonMain - INFO - [PROCESS] Démarrage du Terminal de Trading (processus isolé)...
+2026-04-14 21:42:18,355 - BizonMain - INFO - [SYSTEM] Dashboard en cours — terminal maintenu ouvert (Ctrl+C pour quitter).
+2026-04-14 21:42:18,655 - BizonDashboard - INFO - [SYSTEM] Correctif de compatibilité Python 3.14 appliqué (Jinja2).
+2026-04-14 21:42:23,636 - httpx - INFO - HTTP Request: GET https://api.gradio.app/gradio-messaging/en "HTTP/1.1 200 OK"
+2026-04-14 21:42:35,028 - bizon_config - INFO - ⚡ Initialisation du contexte Hardware Bizon...
+2026-04-14 21:42:35,028 - hardware_detector - INFO - Starting local hardware detection...
+2026-04-14 21:42:35,349 - httpx - INFO - HTTP Request: GET https://checkip.amazonaws.com/ "HTTP/1.1 200 "
+2026-04-14 21:42:35,354 - httpx - INFO - HTTP Request: GET http://127.0.0.1:7860/startup-events "HTTP/1.1 200 OK"
+2026-04-14 21:42:35,355 - BizonDashboard - INFO - URL Gradio : http://127.0.0.1:7860
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/gradio/routes.py", line 432, in main
+    return templates.TemplateResponse(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        template,
+        ^^^^^^^^^
+    ...<4 lines>...
+        },
+        ^^
+    )
+    ^
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/starlette/templating.py", line 148, in TemplateResponse
+    template = self.get_template(name)
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/starlette/templating.py", line 115, in get_template
+    return self.env.get_template(name)
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/jinja2/environment.py", line 1016, in get_template
+    return self._load_template(name, globals)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/jinja2/environment.py", line 975, in _load_template
+    template = self.loader.load(self, name, self.make_globals(globals))
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/jinja2/loaders.py", line 126, in load
+    source, filename, uptodate = self.get_source(environment, name)
+                                 ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/jinja2/loaders.py", line 209, in get_source
+    raise TemplateNotFound(
+    ...<2 lines>...
+    )
+jinja2.exceptions.TemplateNotFound: {'request': <starlette.requests.Request object at 0x112658c30>, 'config': {'version': '4.44.1', 'mode': 'blocks', 'app_id': 15237058503009321566, 'dev_mode': False, 'analytics_enabled': True, 'components': [{'id': 1, 'type': 'markdown', 'props': {'value': "<h1 style='text-align: center; color: #7A4E2D; margin-top:20px;'>🦬 Bizon Terminal — Mode Visualisation</h1>", 'show_label': True, 'rtl': False, 'latex_delimiters': [{'left': '$$', 'right': '$$', 'display': True}], 'visible': True, 'elem_classes': [], 'sanitize_html': True, 'line_breaks': False, 'header_links': False, 'show_copy_button': False, 'name': 'markdown', '_selectable': False}, 'skip_api': False, 'component_class_id': '0f1153c758be937c35028c4ae822697a', 'key': None, 'api_info': {'type': 'string'}, 'example_inputs': '# Hello!'}, {'id': 2, 'type': 'row', 'props': {'variant': 'default', 'visible': True, 'equal_height': True, 'show_progress': False, 'name': 'row'}, 'skip_api': True, 'component_class_id': 'd46191271dd560b85424da009a0dc603', 'key': None}, {'id': 3, 'type': 'column', 'props': {'scale': 1, 'min_width': 320, 'variant': 'panel', 'visible': True, 'show_progress': False, 'name': 'column'}, 'skip_api': True, 'component_class_id': '7ce27a96479bf1a7c28a716f8b829ac7', 'key': None}, {'id': 4, 'type': 'markdown', 'props': {'value': '### ⚙️ Centre de Contrôle', 'show_label': True, 'rtl': False, 'latex_delimiters': [{'left': '$$', 'right': '$$', 'display': True}], 'visible': True, 'elem_classes': [], 'sanitize_html': True, 'line_breaks': False, 'header_links': False, 'show_copy_button': False, 'name': 'markdown', '_selectable': False}, 'skip_api': False, 'component_class_id': '0f1153c758be937c35028c4ae822697a', 'key': None, 'api_info': {'type': 'string'}, 'example_inputs': '# Hello!'}, {'id': 5, 'type': 'dropdown', 'props': {'choices': [['BTC-USD', 'BTC-USD'], ['ETH-USD', 'ETH-USD'], ['AAPL', 'AAPL'], ['MSFT', 'MSFT'], ['TSLA', 'TSLA'], ['NVDA', 'NVDA']], 'value': 'BTC-USD', 'type': 'value', 'allow_custom_value': False, 'filterable': True, 'label': 'Actif Financier', 'show_label': True, 'container': True, 'min_width': 160, 'interactive': True, 'visible': True, 'elem_classes': [], 'name': 'dropdown', '_selectable': False}, 'skip_api': False, 'component_class_id': '6e5a28f56488c5f596f6a1f6be7f9893', 'key': None, 'api_info': {'type': 'string', 'enum': ['BTC-USD', 'ETH-USD', 'AAPL', 'MSFT', 'TSLA', 'NVDA']}, 'example_inputs': 'BTC-USD'}, {'id': 6, 'type': 'dropdown', 'props': {'choices': [['3mo', '3mo'], ['6mo', '6mo'], ['1y', '1y'], ['2y', '2y'], ['5y', '5y']], 'value': '1y', 'type': 'value', 'allow_custom_value': False, 'filterable': True, 'label': 'Profondeur Historique', 'show_label': True, 'container': True, 'min_width': 160, 'interactive': True, 'visible': True, 'elem_classes': [], 'name': 'dropdown', '_selectable': False}, 'skip_api': False, 'component_class_id': '6e5a28f56488c5f596f6a1f6be7f9893', 'key': None, 'api_info': {'type': 'string', 'enum': ['3mo', '6mo', '1y', '2y', '5y']}, 'example_inputs': '3mo'}, {'id': 7, 'type': 'dropdown', 'props': {'choices': [['1d', '1d'], ['1wk', '1wk']], 'value': '1d', 'type': 'value', 'allow_custom_value': False, 'filterable': True, 'label': 'Bougies (Intervalle)', 'show_label': True, 'container': True, 'min_width': 160, 'interactive': True, 'visible': True, 'elem_classes': [], 'name': 'dropdown', '_selectable': False}, 'skip_api': False, 'component_class_id': '6e5a28f56488c5f596f6a1f6be7f9893', 'key': None, 'api_info': {'type': 'string', 'enum': ['1d', '1wk']}, 'example_inputs': '1d'}, {'id': 8, 'type': 'button', 'props': {'value': "📊 Actualiser l'analyse", 'variant': 'primary', 'visible': True, 'interactive': True, 'elem_classes': [], 'name': 'button', '_selectable': False}, 'skip_api': True, 'component_class_id': '2de92426a4b11af4714a9439ed9eb599', 'key': None}, {'id': 9, 'type': 'markdown', 'props': {'value': '### 💻 Composants Système', 'show_label': True, 'rtl': False, 'latex_delimiters': [{'left': '$$', 'right': '$$', 'display': True}], 'visible': True, 'elem_classes': [], 'sanitize_html': True, 'line_breaks': False, 'header_links': False, 'show_copy_button': False, 'name': 'markdown', '_selectable': False}, 'skip_api': False, 'component_class_id': '0f1153c758be937c35028c4ae822697a', 'key': None, 'api_info': {'type': 'string'}, 'example_inputs': '# Hello!'}, {'id': 10, 'type': 'markdown', 'props': {'value': "<span style='color: #4A7A4A; font-weight: bold;'>🚀 Accélération matérielle CPU active (10 cœurs)</span>", 'show_label': True, 'rtl': False, 'latex_delimiters': [{'left': '$$', 'right': '$$', 'display': True}], 'visible': True, 'elem_classes': [], 'sanitize_html': True, 'line_breaks': False, 'header_links': False, 'show_copy_button': False, 'name': 'markdown', '_selectable': False}, 'skip_api': False, 'component_class_id': '0f1153c758be937c35028c4ae822697a', 'key': None, 'api_info': {'type': 'string'}, 'example_inputs': '# Hello!'}, {'id': 11, 'type': 'markdown', 'props': {'value': "<span style='color: #7A4E2D; font-size:0.9em;'>Batch : 32 | Vitesse de calcul allouée : 100ms</span>", 'show_label': True, 'rtl': False, 'latex_delimiters': [{'left': '$$', 'right': '$$', 'display': True}], 'visible': True, 'elem_classes': [], 'sanitize_html': True, 'line_breaks': False, 'header_links': False, 'show_copy_button': False, 'name': 'markdown', '_selectable': False}, 'skip_api': False, 'component_class_id': '0f1153c758be937c35028c4ae822697a', 'key': None, 'api_info': {'type': 'string'}, 'example_inputs': '# Hello!'}, {'id': 12, 'type': 'markdown', 'props': {'value': '🟢 Prêt.', 'show_label': True, 'rtl': False, 'latex_delimiters': [{'left': '$$', 'right': '$$', 'display': True}], 'visible': True, 'elem_classes': [], 'sanitize_html': True, 'line_breaks': False, 'header_links': False, 'show_copy_button': False, 'name': 'markdown', '_selectable': False}, 'skip_api': False, 'component_class_id': '0f1153c758be937c35028c4ae822697a', 'key': None, 'api_info': {'type': 'string'}, 'example_inputs': '# Hello!'}, {'id': 13, 'type': 'form', 'props': {'scale': 0, 'min_width': 0, 'name': 'form'}, 'skip_api': True, 'component_class_id': '25c3986aa066ed152a0514ddc4b3797d', 'key': None}, {'id': 14, 'type': 'column', 'props': {'scale': 4, 'min_width': 320, 'variant': 'default', 'visible': True, 'show_progress': False, 'name': 'column'}, 'skip_api': True, 'component_class_id': '7ce27a96479bf1a7c28a716f8b829ac7', 'key': None}, {'id': 15, 'type': 'plot', 'props': {'format': 'webp', 'label': 'Graphiques Financiers', 'show_label': True, 'container': True, 'min_width': 160, 'visible': True, 'elem_classes': [], 'name': 'plot', '_selectable': False}, 'skip_api': False, 'component_class_id': '6a249a118d7f04e858769219b3f35ad1', 'key': None, 'api_info': {'properties': {'type': {'enum': ['altair', 'bokeh', 'plotly', 'matplotlib'], 'title': 'Type', 'type': 'string'}, 'plot': {'title': 'Plot', 'type': 'string'}}, 'required': ['type', 'plot'], 'title': 'PlotData', 'type': 'object'}, 'example_inputs': None}], 'css': None, 'connect_heartbeat': False, 'js': None, 'head': None, 'title': 'Bizon Dashboard', 'space_id': None, 'enable_queue': True, 'show_error': False, 'show_api': True, 'is_colab': False, 'max_file_size': None, 'stylesheets': ['https://fonts.googleapis.com/css2?family=Outfit:wght@400;600&display=swap', 'https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&display=swap'], 'theme': 'soft', 'protocol': 'sse_v3', 'body_css': {'body_background_fill': '#fafaf9', 'body_text_color': '#292524', 'body_background_fill_dark': '#0f0e0d', 'body_text_color_dark': '#f5f5f4'}, 'fill_height': False, 'fill_width': False, 'theme_hash': '8039b1c5f99a3bcd562e36624c41d2aa318090b46960679da327abba595a9caf', 'layout': {'id': 0, 'children': [{'id': 1}, {'id': 2, 'children': [{'id': 3, 'children': [{'id': 4}, {'id': 13, 'children': [{'id': 5}, {'id': 6}, {'id': 7}]}, {'id': 8}, {'id': 9}, {'id': 10}, {'id': 11}, {'id': 12}]}, {'id': 14, 'children': [{'id': 15}]}]}]}, 'dependencies': [{'id': 0, 'targets': [[8, 'click']], 'inputs': [5, 6, 7], 'outputs': [15, 12], 'backend_fn': True, 'js': None, 'queue': True, 'api_name': 'update_ui', 'scroll_to_output': False, 'show_progress': 'full', 'batch': False, 'max_batch_size': 4, 'cancels': [], 'types': {'generator': False, 'cancel': False}, 'collects_event_data': False, 'trigger_after': None, 'trigger_only_on_success': False, 'trigger_mode': 'once', 'show_api': True, 'zerogpu': False, 'rendered_in': None}, {'id': 1, 'targets': [[0, 'load']], 'inputs': [5, 6, 7], 'outputs': [15, 12], 'backend_fn': True, 'js': None, 'queue': True, 'api_name': 'update_ui_1', 'scroll_to_output': False, 'show_progress': 'full', 'batch': False, 'max_batch_size': 4, 'cancels': [], 'types': {'generator': False, 'cancel': False}, 'collects_event_data': False, 'trigger_after': None, 'trigger_only_on_success': False, 'trigger_mode': 'once', 'show_api': True, 'zerogpu': False, 'rendered_in': None}], 'root': 'http://127.0.0.1:7860', 'username': None}, 'gradio_api_info': {'named_endpoints': {'/update_ui': {'parameters': [{'label': 'Actif Financier', 'parameter_name': 'ticker', 'parameter_has_default': True, 'parameter_default': 'BTC-USD', 'type': {'type': 'string', 'enum': ['BTC-USD', 'ETH-USD', 'AAPL', 'MSFT', 'TSLA', 'NVDA']}, 'python_type': {'type': "Literal['BTC-USD', 'ETH-USD', 'AAPL', 'MSFT', 'TSLA', 'NVDA']", 'description': ''}, 'component': 'Dropdown', 'example_input': 'BTC-USD'}, {'label': 'Profondeur Historique', 'parameter_name': 'period', 'parameter_has_default': True, 'parameter_default': '1y', 'type': {'type': 'string', 'enum': ['3mo', '6mo', '1y', '2y', '5y']}, 'python_type': {'type': "Literal['3mo', '6mo', '1y', '2y', '5y']", 'description': ''}, 'component': 'Dropdown', 'example_input': '3mo'}, {'label': 'Bougies (Intervalle)', 'parameter_name': 'interval', 'parameter_has_default': True, 'parameter_default': '1d', 'type': {'type': 'string', 'enum': ['1d', '1wk']}, 'python_type': {'type': "Literal['1d', '1wk']", 'description': ''}, 'component': 'Dropdown', 'example_input': '1d'}], 'returns': [{'label': 'Graphiques Financiers', 'type': {'properties': {'type': {'enum': ['altair', 'bokeh', 'plotly', 'matplotlib'], 'title': 'Type', 'type': 'string'}, 'plot': {'title': 'Plot', 'type': 'string'}}, 'required': ['type', 'plot'], 'title': 'PlotData', 'type': 'object'}, 'python_type': {'type': "Dict(type: Literal['altair', 'bokeh', 'plotly', 'matplotlib'], plot: str)", 'description': ''}, 'component': 'Plot'}, {'label': 'value_12', 'type': {'type': 'string'}, 'python_type': {'type': 'str', 'description': ''}, 'component': 'Markdown'}], 'show_api': True}, '/update_ui_1': {'parameters': [{'label': 'Actif Financier', 'parameter_name': 'ticker', 'parameter_has_default': True, 'parameter_default': 'BTC-USD', 'type': {'type': 'string', 'enum': ['BTC-USD', 'ETH-USD', 'AAPL', 'MSFT', 'TSLA', 'NVDA']}, 'python_type': {'type': "Literal['BTC-USD', 'ETH-USD', 'AAPL', 'MSFT', 'TSLA', 'NVDA']", 'description': ''}, 'component': 'Dropdown', 'example_input': 'BTC-USD'}, {'label': 'Profondeur Historique', 'parameter_name': 'period', 'parameter_has_default': True, 'parameter_default': '1y', 'type': {'type': 'string', 'enum': ['3mo', '6mo', '1y', '2y', '5y']}, 'python_type': {'type': "Literal['3mo', '6mo', '1y', '2y', '5y']", 'description': ''}, 'component': 'Dropdown', 'example_input': '3mo'}, {'label': 'Bougies (Intervalle)', 'parameter_name': 'interval', 'parameter_has_default': True, 'parameter_default': '1d', 'type': {'type': 'string', 'enum': ['1d', '1wk']}, 'python_type': {'type': "Literal['1d', '1wk']", 'description': ''}, 'component': 'Dropdown', 'example_input': '1d'}], 'returns': [{'label': 'Graphiques Financiers', 'type': {'properties': {'type': {'enum': ['altair', 'bokeh', 'plotly', 'matplotlib'], 'title': 'Type', 'type': 'string'}, 'plot': {'title': 'Plot', 'type': 'string'}}, 'required': ['type', 'plot'], 'title': 'PlotData', 'type': 'object'}, 'python_type': {'type': "Dict(type: Literal['altair', 'bokeh', 'plotly', 'matplotlib'], plot: str)", 'description': ''}, 'component': 'Plot'}, {'label': 'value_12', 'type': {'type': 'string'}, 'python_type': {'type': 'str', 'description': ''}, 'component': 'Markdown'}], 'show_api': True}}, 'unnamed_endpoints': {}}} not found in search path: '/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/gradio/templates'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/uvicorn/protocols/http/h11_impl.py", line 415, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self.scope, self.receive, self.send
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/fastapi/applications.py", line 1163, in __call__
+    await super().__call__(scope, receive, send)
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/starlette/applications.py", line 90, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/gradio/route_utils.py", line 761, in __call__
+    await self.app(scope, receive, send)
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/starlette/routing.py", line 660, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/starlette/routing.py", line 680, in app
+    await route.handle(scope, receive, send)
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/starlette/routing.py", line 276, in handle
+    await self.app(scope, receive, send)
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/fastapi/routing.py", line 134, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/fastapi/routing.py", line 120, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/fastapi/routing.py", line 674, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/fastapi/routing.py", line 330, in run_endpoint_function
+    return await run_in_threadpool(dependant.call, **values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/starlette/concurrency.py", line 32, in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/anyio/to_thread.py", line 63, in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        func, args, abandon_on_cancel=abandon_on_cancel, limiter=limiter
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/anyio/_backends/_asyncio.py", line 2518, in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/anyio/_backends/_asyncio.py", line 1002, in run
+    result = context.run(func, *args)
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/gradio/routes.py", line 447, in main
+    raise ValueError(
+    ...<2 lines>...
+    ) from err
+ValueError: Did you install Gradio from source files? You need to build the frontend by running /scripts/build_frontend.sh
+2026-04-14 21:42:35,380 - BizonDashboard - INFO - Ouverture App Bizon (Mac) → http://127.0.0.1:7860
+2026-04-14 21:42:36,673 - httpx - INFO - HTTP Request: GET https://api.gradio.app/pkg-version "HTTP/1.1 200 OK"
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/gradio/routes.py", line 432, in main
+    return templates.TemplateResponse(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        template,
+        ^^^^^^^^^
+    ...<4 lines>...
+        },
+        ^^
+    )
+    ^
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/starlette/templating.py", line 148, in TemplateResponse
+    template = self.get_template(name)
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/starlette/templating.py", line 115, in get_template
+    return self.env.get_template(name)
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/jinja2/environment.py", line 1016, in get_template
+    return self._load_template(name, globals)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/jinja2/environment.py", line 975, in _load_template
+    template = self.loader.load(self, name, self.make_globals(globals))
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/jinja2/loaders.py", line 126, in load
+    source, filename, uptodate = self.get_source(environment, name)
+                                 ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/jinja2/loaders.py", line 209, in get_source
+    raise TemplateNotFound(
+    ...<2 lines>...
+    )
+jinja2.exceptions.TemplateNotFound: {'request': <starlette.requests.Request object at 0x1129e3ac0>, 'config': {'version': '4.44.1', 'mode': 'blocks', 'app_id': 15237058503009321566, 'dev_mode': False, 'analytics_enabled': True, 'components': [{'id': 1, 'type': 'markdown', 'props': {'value': "<h1 style='text-align: center; color: #7A4E2D; margin-top:20px;'>🦬 Bizon Terminal — Mode Visualisation</h1>", 'show_label': True, 'rtl': False, 'latex_delimiters': [{'left': '$$', 'right': '$$', 'display': True}], 'visible': True, 'elem_classes': [], 'sanitize_html': True, 'line_breaks': False, 'header_links': False, 'show_copy_button': False, 'name': 'markdown', '_selectable': False}, 'skip_api': False, 'component_class_id': '0f1153c758be937c35028c4ae822697a', 'key': None, 'api_info': {'type': 'string'}, 'example_inputs': '# Hello!'}, {'id': 2, 'type': 'row', 'props': {'variant': 'default', 'visible': True, 'equal_height': True, 'show_progress': False, 'name': 'row'}, 'skip_api': True, 'component_class_id': 'd46191271dd560b85424da009a0dc603', 'key': None}, {'id': 3, 'type': 'column', 'props': {'scale': 1, 'min_width': 320, 'variant': 'panel', 'visible': True, 'show_progress': False, 'name': 'column'}, 'skip_api': True, 'component_class_id': '7ce27a96479bf1a7c28a716f8b829ac7', 'key': None}, {'id': 4, 'type': 'markdown', 'props': {'value': '### ⚙️ Centre de Contrôle', 'show_label': True, 'rtl': False, 'latex_delimiters': [{'left': '$$', 'right': '$$', 'display': True}], 'visible': True, 'elem_classes': [], 'sanitize_html': True, 'line_breaks': False, 'header_links': False, 'show_copy_button': False, 'name': 'markdown', '_selectable': False}, 'skip_api': False, 'component_class_id': '0f1153c758be937c35028c4ae822697a', 'key': None, 'api_info': {'type': 'string'}, 'example_inputs': '# Hello!'}, {'id': 5, 'type': 'dropdown', 'props': {'choices': [('BTC-USD', 'BTC-USD'), ('ETH-USD', 'ETH-USD'), ('AAPL', 'AAPL'), ('MSFT', 'MSFT'), ('TSLA', 'TSLA'), ('NVDA', 'NVDA')], 'value': 'BTC-USD', 'type': 'value', 'allow_custom_value': False, 'filterable': True, 'label': 'Actif Financier', 'show_label': True, 'container': True, 'min_width': 160, 'interactive': True, 'visible': True, 'elem_classes': [], 'name': 'dropdown', '_selectable': False}, 'skip_api': False, 'component_class_id': '6e5a28f56488c5f596f6a1f6be7f9893', 'key': None, 'api_info': {'type': 'string', 'enum': ['BTC-USD', 'ETH-USD', 'AAPL', 'MSFT', 'TSLA', 'NVDA']}, 'example_inputs': 'BTC-USD'}, {'id': 6, 'type': 'dropdown', 'props': {'choices': [('3mo', '3mo'), ('6mo', '6mo'), ('1y', '1y'), ('2y', '2y'), ('5y', '5y')], 'value': '1y', 'type': 'value', 'allow_custom_value': False, 'filterable': True, 'label': 'Profondeur Historique', 'show_label': True, 'container': True, 'min_width': 160, 'interactive': True, 'visible': True, 'elem_classes': [], 'name': 'dropdown', '_selectable': False}, 'skip_api': False, 'component_class_id': '6e5a28f56488c5f596f6a1f6be7f9893', 'key': None, 'api_info': {'type': 'string', 'enum': ['3mo', '6mo', '1y', '2y', '5y']}, 'example_inputs': '3mo'}, {'id': 7, 'type': 'dropdown', 'props': {'choices': [('1d', '1d'), ('1wk', '1wk')], 'value': '1d', 'type': 'value', 'allow_custom_value': False, 'filterable': True, 'label': 'Bougies (Intervalle)', 'show_label': True, 'container': True, 'min_width': 160, 'interactive': True, 'visible': True, 'elem_classes': [], 'name': 'dropdown', '_selectable': False}, 'skip_api': False, 'component_class_id': '6e5a28f56488c5f596f6a1f6be7f9893', 'key': None, 'api_info': {'type': 'string', 'enum': ['1d', '1wk']}, 'example_inputs': '1d'}, {'id': 8, 'type': 'button', 'props': {'value': "📊 Actualiser l'analyse", 'variant': 'primary', 'visible': True, 'interactive': True, 'elem_classes': [], 'name': 'button', '_selectable': False}, 'skip_api': True, 'component_class_id': '2de92426a4b11af4714a9439ed9eb599', 'key': None}, {'id': 9, 'type': 'markdown', 'props': {'value': '### 💻 Composants Système', 'show_label': True, 'rtl': False, 'latex_delimiters': [{'left': '$$', 'right': '$$', 'display': True}], 'visible': True, 'elem_classes': [], 'sanitize_html': True, 'line_breaks': False, 'header_links': False, 'show_copy_button': False, 'name': 'markdown', '_selectable': False}, 'skip_api': False, 'component_class_id': '0f1153c758be937c35028c4ae822697a', 'key': None, 'api_info': {'type': 'string'}, 'example_inputs': '# Hello!'}, {'id': 10, 'type': 'markdown', 'props': {'value': "<span style='color: #4A7A4A; font-weight: bold;'>🚀 Accélération matérielle CPU active (10 cœurs)</span>", 'show_label': True, 'rtl': False, 'latex_delimiters': [{'left': '$$', 'right': '$$', 'display': True}], 'visible': True, 'elem_classes': [], 'sanitize_html': True, 'line_breaks': False, 'header_links': False, 'show_copy_button': False, 'name': 'markdown', '_selectable': False}, 'skip_api': False, 'component_class_id': '0f1153c758be937c35028c4ae822697a', 'key': None, 'api_info': {'type': 'string'}, 'example_inputs': '# Hello!'}, {'id': 11, 'type': 'markdown', 'props': {'value': "<span style='color: #7A4E2D; font-size:0.9em;'>Batch : 32 | Vitesse de calcul allouée : 100ms</span>", 'show_label': True, 'rtl': False, 'latex_delimiters': [{'left': '$$', 'right': '$$', 'display': True}], 'visible': True, 'elem_classes': [], 'sanitize_html': True, 'line_breaks': False, 'header_links': False, 'show_copy_button': False, 'name': 'markdown', '_selectable': False}, 'skip_api': False, 'component_class_id': '0f1153c758be937c35028c4ae822697a', 'key': None, 'api_info': {'type': 'string'}, 'example_inputs': '# Hello!'}, {'id': 12, 'type': 'markdown', 'props': {'value': '🟢 Prêt.', 'show_label': True, 'rtl': False, 'latex_delimiters': [{'left': '$$', 'right': '$$', 'display': True}], 'visible': True, 'elem_classes': [], 'sanitize_html': True, 'line_breaks': False, 'header_links': False, 'show_copy_button': False, 'name': 'markdown', '_selectable': False}, 'skip_api': False, 'component_class_id': '0f1153c758be937c35028c4ae822697a', 'key': None, 'api_info': {'type': 'string'}, 'example_inputs': '# Hello!'}, {'id': 13, 'type': 'form', 'props': {'scale': 0, 'min_width': 0, 'name': 'form'}, 'skip_api': True, 'component_class_id': '25c3986aa066ed152a0514ddc4b3797d', 'key': None}, {'id': 14, 'type': 'column', 'props': {'scale': 4, 'min_width': 320, 'variant': 'default', 'visible': True, 'show_progress': False, 'name': 'column'}, 'skip_api': True, 'component_class_id': '7ce27a96479bf1a7c28a716f8b829ac7', 'key': None}, {'id': 15, 'type': 'plot', 'props': {'format': 'webp', 'label': 'Graphiques Financiers', 'show_label': True, 'container': True, 'min_width': 160, 'visible': True, 'elem_classes': [], 'name': 'plot', '_selectable': False}, 'skip_api': False, 'component_class_id': '6a249a118d7f04e858769219b3f35ad1', 'key': None, 'api_info': {'properties': {'type': {'enum': ['altair', 'bokeh', 'plotly', 'matplotlib'], 'title': 'Type', 'type': 'string'}, 'plot': {'title': 'Plot', 'type': 'string'}}, 'required': ['type', 'plot'], 'title': 'PlotData', 'type': 'object'}, 'example_inputs': None}], 'css': None, 'connect_heartbeat': False, 'js': None, 'head': None, 'title': 'Bizon Dashboard', 'space_id': None, 'enable_queue': True, 'show_error': False, 'show_api': True, 'is_colab': False, 'max_file_size': None, 'stylesheets': ['https://fonts.googleapis.com/css2?family=Outfit:wght@400;600&display=swap', 'https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&display=swap'], 'theme': 'soft', 'protocol': 'sse_v3', 'body_css': {'body_background_fill': '#fafaf9', 'body_text_color': '#292524', 'body_background_fill_dark': '#0f0e0d', 'body_text_color_dark': '#f5f5f4'}, 'fill_height': False, 'fill_width': False, 'theme_hash': '8039b1c5f99a3bcd562e36624c41d2aa318090b46960679da327abba595a9caf', 'layout': {'id': 0, 'children': [{'id': 1}, {'id': 2, 'children': [{'id': 3, 'children': [{'id': 4}, {'id': 13, 'children': [{'id': 5}, {'id': 6}, {'id': 7}]}, {'id': 8}, {'id': 9}, {'id': 10}, {'id': 11}, {'id': 12}]}, {'id': 14, 'children': [{'id': 15}]}]}]}, 'dependencies': [{'id': 0, 'targets': [(8, 'click')], 'inputs': [5, 6, 7], 'outputs': [15, 12], 'backend_fn': True, 'js': None, 'queue': True, 'api_name': 'update_ui', 'scroll_to_output': False, 'show_progress': 'full', 'batch': False, 'max_batch_size': 4, 'cancels': [], 'types': {'generator': False, 'cancel': False}, 'collects_event_data': False, 'trigger_after': None, 'trigger_only_on_success': False, 'trigger_mode': 'once', 'show_api': True, 'zerogpu': False, 'rendered_in': None}, {'id': 1, 'targets': [(0, 'load')], 'inputs': [5, 6, 7], 'outputs': [15, 12], 'backend_fn': True, 'js': None, 'queue': True, 'api_name': 'update_ui_1', 'scroll_to_output': False, 'show_progress': 'full', 'batch': False, 'max_batch_size': 4, 'cancels': [], 'types': {'generator': False, 'cancel': False}, 'collects_event_data': False, 'trigger_after': None, 'trigger_only_on_success': False, 'trigger_mode': 'once', 'show_api': True, 'zerogpu': False, 'rendered_in': None}], 'root': 'http://127.0.0.1:7860', 'username': None}, 'gradio_api_info': {'named_endpoints': {'/update_ui': {'parameters': [{'label': 'Actif Financier', 'parameter_name': 'ticker', 'parameter_has_default': True, 'parameter_default': 'BTC-USD', 'type': {'type': 'string', 'enum': ['BTC-USD', 'ETH-USD', 'AAPL', 'MSFT', 'TSLA', 'NVDA']}, 'python_type': {'type': "Literal['BTC-USD', 'ETH-USD', 'AAPL', 'MSFT', 'TSLA', 'NVDA']", 'description': ''}, 'component': 'Dropdown', 'example_input': 'BTC-USD'}, {'label': 'Profondeur Historique', 'parameter_name': 'period', 'parameter_has_default': True, 'parameter_default': '1y', 'type': {'type': 'string', 'enum': ['3mo', '6mo', '1y', '2y', '5y']}, 'python_type': {'type': "Literal['3mo', '6mo', '1y', '2y', '5y']", 'description': ''}, 'component': 'Dropdown', 'example_input': '3mo'}, {'label': 'Bougies (Intervalle)', 'parameter_name': 'interval', 'parameter_has_default': True, 'parameter_default': '1d', 'type': {'type': 'string', 'enum': ['1d', '1wk']}, 'python_type': {'type': "Literal['1d', '1wk']", 'description': ''}, 'component': 'Dropdown', 'example_input': '1d'}], 'returns': [{'label': 'Graphiques Financiers', 'type': {'properties': {'type': {'enum': ['altair', 'bokeh', 'plotly', 'matplotlib'], 'title': 'Type', 'type': 'string'}, 'plot': {'title': 'Plot', 'type': 'string'}}, 'required': ['type', 'plot'], 'title': 'PlotData', 'type': 'object'}, 'python_type': {'type': "Dict(type: Literal['altair', 'bokeh', 'plotly', 'matplotlib'], plot: str)", 'description': ''}, 'component': 'Plot'}, {'label': 'value_12', 'type': {'type': 'string'}, 'python_type': {'type': 'str', 'description': ''}, 'component': 'Markdown'}], 'show_api': True}, '/update_ui_1': {'parameters': [{'label': 'Actif Financier', 'parameter_name': 'ticker', 'parameter_has_default': True, 'parameter_default': 'BTC-USD', 'type': {'type': 'string', 'enum': ['BTC-USD', 'ETH-USD', 'AAPL', 'MSFT', 'TSLA', 'NVDA']}, 'python_type': {'type': "Literal['BTC-USD', 'ETH-USD', 'AAPL', 'MSFT', 'TSLA', 'NVDA']", 'description': ''}, 'component': 'Dropdown', 'example_input': 'BTC-USD'}, {'label': 'Profondeur Historique', 'parameter_name': 'period', 'parameter_has_default': True, 'parameter_default': '1y', 'type': {'type': 'string', 'enum': ['3mo', '6mo', '1y', '2y', '5y']}, 'python_type': {'type': "Literal['3mo', '6mo', '1y', '2y', '5y']", 'description': ''}, 'component': 'Dropdown', 'example_input': '3mo'}, {'label': 'Bougies (Intervalle)', 'parameter_name': 'interval', 'parameter_has_default': True, 'parameter_default': '1d', 'type': {'type': 'string', 'enum': ['1d', '1wk']}, 'python_type': {'type': "Literal['1d', '1wk']", 'description': ''}, 'component': 'Dropdown', 'example_input': '1d'}], 'returns': [{'label': 'Graphiques Financiers', 'type': {'properties': {'type': {'enum': ['altair', 'bokeh', 'plotly', 'matplotlib'], 'title': 'Type', 'type': 'string'}, 'plot': {'title': 'Plot', 'type': 'string'}}, 'required': ['type', 'plot'], 'title': 'PlotData', 'type': 'object'}, 'python_type': {'type': "Dict(type: Literal['altair', 'bokeh', 'plotly', 'matplotlib'], plot: str)", 'description': ''}, 'component': 'Plot'}, {'label': 'value_12', 'type': {'type': 'string'}, 'python_type': {'type': 'str', 'description': ''}, 'component': 'Markdown'}], 'show_api': True}}, 'unnamed_endpoints': {}}} not found in search path: '/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/gradio/templates'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/uvicorn/protocols/http/h11_impl.py", line 415, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self.scope, self.receive, self.send
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/fastapi/applications.py", line 1163, in __call__
+    await super().__call__(scope, receive, send)
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/starlette/applications.py", line 90, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/gradio/route_utils.py", line 761, in __call__
+    await self.app(scope, receive, send)
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/starlette/routing.py", line 660, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/starlette/routing.py", line 680, in app
+    await route.handle(scope, receive, send)
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/starlette/routing.py", line 276, in handle
+    await self.app(scope, receive, send)
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/fastapi/routing.py", line 134, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/fastapi/routing.py", line 120, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/fastapi/routing.py", line 674, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/fastapi/routing.py", line 330, in run_endpoint_function
+    return await run_in_threadpool(dependant.call, **values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/starlette/concurrency.py", line 32, in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/anyio/to_thread.py", line 63, in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        func, args, abandon_on_cancel=abandon_on_cancel, limiter=limiter
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/anyio/_backends/_asyncio.py", line 2518, in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/anyio/_backends/_asyncio.py", line 1002, in run
+    result = context.run(func, *args)
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/gradio/routes.py", line 447, in main
+    raise ValueError(
+    ...<2 lines>...
+    ) from err
+ValueError: Did you install Gradio from source files? You need to build the frontend by running /scripts/build_frontend.sh
+2026-04-14 21:44:35,052 - BizonMain - INFO - [SYSTEM] Dashboard fermé.
+2026-04-14 21:45:35,572 - BizonMain - INFO - [SYSTEM] Démarrage de l'interface de contrôle...
+2026-04-14 21:45:35,875 - LauncherUI - INFO - [HARDWARE] Lancement de la détection...
+2026-04-14 21:45:35,884 - hardware_detector - INFO - Starting local hardware detection...
+2026-04-14 21:45:35,884 - LauncherUI - INFO - [HARDWARE] Détection terminée : Darwin | 10 cores
+2026-04-14 21:45:35,885 - LauncherUI - INFO - [UI] Mise à jour du rapport matériel sur l'interface.
+2026-04-14 21:45:46,387 - BizonMain - INFO - [UI] Signal de lancement du terminal reçu depuis LauncherUI.
+2026-04-14 21:45:46,387 - BizonMain - INFO - [PROCESS] Démarrage du Terminal de Trading (processus isolé)...
+2026-04-14 21:45:46,406 - BizonMain - INFO - [SYSTEM] Dashboard en cours — terminal maintenu ouvert (Ctrl+C pour quitter).
+2026-04-14 21:45:52,219 - httpx - INFO - HTTP Request: GET https://api.gradio.app/gradio-messaging/en "HTTP/1.1 200 OK"
+2026-04-14 21:46:01,987 - BizonDashboard - INFO - [SYSTEM] Correctifs de stabilité ALPHA (Python 3.14) appliqués.
+2026-04-14 21:46:03,693 - bizon_config - INFO - ⚡ Initialisation du contexte Hardware Bizon...
+2026-04-14 21:46:03,693 - hardware_detector - INFO - Starting local hardware detection...
+2026-04-14 21:46:03,824 - httpx - INFO - HTTP Request: GET https://checkip.amazonaws.com/ "HTTP/1.1 200 "
+2026-04-14 21:46:04,021 - httpx - INFO - HTTP Request: GET http://127.0.0.1:7860/startup-events "HTTP/1.1 200 OK"
+2026-04-14 21:46:04,022 - BizonDashboard - INFO - URL Gradio : http://127.0.0.1:7860
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/gradio/routes.py", line 432, in main
+    return templates.TemplateResponse(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        template,
+        ^^^^^^^^^
+    ...<4 lines>...
+        },
+        ^^
+    )
+    ^
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/starlette/templating.py", line 148, in TemplateResponse
+    template = self.get_template(name)
+  File "/Users/joshua/Desktop/bizon/src/ui/dashboard.py", line 34, in _safe_get_template
+    return _orig_get_template(self, name)
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/starlette/templating.py", line 115, in get_template
+    return self.env.get_template(name)
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/jinja2/environment.py", line 1016, in get_template
+    return self._load_template(name, globals)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/jinja2/environment.py", line 975, in _load_template
+    template = self.loader.load(self, name, self.make_globals(globals))
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/jinja2/loaders.py", line 126, in load
+    source, filename, uptodate = self.get_source(environment, name)
+                                 ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/jinja2/loaders.py", line 209, in get_source
+    raise TemplateNotFound(
+    ...<2 lines>...
+    )
+jinja2.exceptions.TemplateNotFound: '{\'request\': <starlette.requests.Request object at 0x112c09480>, \'config\': {\'version\': \'4.44.1\', \'mode\': \'blocks\', \'app_id\': 17776988882030041188, \'dev_mode\': False, \'analytics_enabled\': True, \'components\': [{\'id\': 1, \'type\': \'markdown\', \'props\': {\'value\': "<h1 style=\'text-align: center; color: #7A4E2D; margin-top:20px;\'>🦬 Bizon Terminal — Mode Visualisation</h1>", \'show_label\': True, \'rtl\': False, \'latex_delimiters\': [{\'left\': \'$$\', \'right\': \'$$\', \'display\': True}], \'visible\': True, \'elem_classes\': [], \'sanitize_html\': True, \'line_breaks\': False, \'header_links\': False, \'show_copy_button\': False, \'name\': \'markdown\', \'_selectable\': False}, \'skip_api\': False, \'component_class_id\': \'0f1153c758be937c35028c4ae822697a\', \'key\': None, \'api_info\': {\'type\': \'string\'}, \'example_inputs\': \'# Hello!\'}, {\'id\': 2, \'type\': \'row\', \'props\': {\'variant\': \'default\', \'visible\': True, \'equal_height\': True, \'show_progress\': False, \'name\': \'row\'}, \'skip_api\': True, \'component_class_id\': \'d46191271dd560b85424da009a0dc603\', \'key\': None}, {\'id\': 3, \'type\': \'column\', \'props\': {\'scale\': 1, \'min_width\': 320, \'variant\': \'panel\', \'visible\': True, \'show_progress\': False, \'name\': \'column\'}, \'skip_api\': True, \'component_class_id\': \'7ce27a96479bf1a7c28a716f8b829ac7\', \'key\': None}, {\'id\': 4, \'type\': \'markdown\', \'props\': {\'value\': \'### ⚙️ Centre de Contrôle\', \'show_label\': True, \'rtl\': False, \'latex_delimiters\': [{\'left\': \'$$\', \'right\': \'$$\', \'display\': True}], \'visible\': True, \'elem_classes\': [], \'sanitize_html\': True, \'line_breaks\': False, \'header_links\': False, \'show_copy_button\': False, \'name\': \'markdown\', \'_selectable\': False}, \'skip_api\': False, \'component_class_id\': \'0f1153c758be937c35028c4ae822697a\', \'key\': None, \'api_info\': {\'type\': \'string\'}, \'example_inputs\': \'# Hello!\'}, {\'id\': 5, \'type\': \'dropdown\', \'props\': {\'choices\': [[\'BTC-USD\', \'BTC-USD\'], [\'ETH-USD\', \'ETH-USD\'], [\'AAPL\', \'AAPL\'], [\'MSFT\', \'MSFT\'], [\'TSLA\', \'TSLA\'], [\'NVDA\', \'NVDA\']], \'value\': \'BTC-USD\', \'type\': \'value\', \'allow_custom_value\': False, \'filterable\': True, \'label\': \'Actif Financier\', \'show_label\': True, \'container\': True, \'min_width\': 160, \'interactive\': True, \'visible\': True, \'elem_classes\': [], \'name\': \'dropdown\', \'_selectable\': False}, \'skip_api\': False, \'component_class_id\': \'6e5a28f56488c5f596f6a1f6be7f9893\', \'key\': None, \'api_info\': {\'type\': \'string\', \'enum\': [\'BTC-USD\', \'ETH-USD\', \'AAPL\', \'MSFT\', \'TSLA\', \'NVDA\']}, \'example_inputs\': \'BTC-USD\'}, {\'id\': 6, \'type\': \'dropdown\', \'props\': {\'choices\': [[\'3mo\', \'3mo\'], [\'6mo\', \'6mo\'], [\'1y\', \'1y\'], [\'2y\', \'2y\'], [\'5y\', \'5y\']], \'value\': \'1y\', \'type\': \'value\', \'allow_custom_value\': False, \'filterable\': True, \'label\': \'Profondeur Historique\', \'show_label\': True, \'container\': True, \'min_width\': 160, \'interactive\': True, \'visible\': True, \'elem_classes\': [], \'name\': \'dropdown\', \'_selectable\': False}, \'skip_api\': False, \'component_class_id\': \'6e5a28f56488c5f596f6a1f6be7f9893\', \'key\': None, \'api_info\': {\'type\': \'string\', \'enum\': [\'3mo\', \'6mo\', \'1y\', \'2y\', \'5y\']}, \'example_inputs\': \'3mo\'}, {\'id\': 7, \'type\': \'dropdown\', \'props\': {\'choices\': [[\'1d\', \'1d\'], [\'1wk\', \'1wk\']], \'value\': \'1d\', \'type\': \'value\', \'allow_custom_value\': False, \'filterable\': True, \'label\': \'Bougies (Intervalle)\', \'show_label\': True, \'container\': True, \'min_width\': 160, \'interactive\': True, \'visible\': True, \'elem_classes\': [], \'name\': \'dropdown\', \'_selectable\': False}, \'skip_api\': False, \'component_class_id\': \'6e5a28f56488c5f596f6a1f6be7f9893\', \'key\': None, \'api_info\': {\'type\': \'string\', \'enum\': [\'1d\', \'1wk\']}, \'example_inputs\': \'1d\'}, {\'id\': 8, \'type\': \'button\', \'props\': {\'value\': "📊 Actualiser l\'analyse", \'variant\': \'primary\', \'visible\': True, \'interactive\': True, \'elem_classes\': [], \'name\': \'button\', \'_selectable\': False}, \'skip_api\': True, \'component_class_id\': \'2de92426a4b11af4714a9439ed9eb599\', \'key\': None}, {\'id\': 9, \'type\': \'markdown\', \'props\': {\'value\': \'### 💻 Composants Système\', \'show_label\': True, \'rtl\': False, \'latex_delimiters\': [{\'left\': \'$$\', \'right\': \'$$\', \'display\': True}], \'visible\': True, \'elem_classes\': [], \'sanitize_html\': True, \'line_breaks\': False, \'header_links\': False, \'show_copy_button\': False, \'name\': \'markdown\', \'_selectable\': False}, \'skip_api\': False, \'component_class_id\': \'0f1153c758be937c35028c4ae822697a\', \'key\': None, \'api_info\': {\'type\': \'string\'}, \'example_inputs\': \'# Hello!\'}, {\'id\': 10, \'type\': \'markdown\', \'props\': {\'value\': "<span style=\'color: #4A7A4A; font-weight: bold;\'>🚀 Accélération matérielle CPU active (10 cœurs)</span>", \'show_label\': True, \'rtl\': False, \'latex_delimiters\': [{\'left\': \'$$\', \'right\': \'$$\', \'display\': True}], \'visible\': True, \'elem_classes\': [], \'sanitize_html\': True, \'line_breaks\': False, \'header_links\': False, \'show_copy_button\': False, \'name\': \'markdown\', \'_selectable\': False}, \'skip_api\': False, \'component_class_id\': \'0f1153c758be937c35028c4ae822697a\', \'key\': None, \'api_info\': {\'type\': \'string\'}, \'example_inputs\': \'# Hello!\'}, {\'id\': 11, \'type\': \'markdown\', \'props\': {\'value\': "<span style=\'color: #7A4E2D; font-size:0.9em;\'>Batch : 32 | Vitesse de calcul allouée : 100ms</span>", \'show_label\': True, \'rtl\': False, \'latex_delimiters\': [{\'left\': \'$$\', \'right\': \'$$\', \'display\': True}], \'visible\': True, \'elem_classes\': [], \'sanitize_html\': True, \'line_breaks\': False, \'header_links\': False, \'show_copy_button\': False, \'name\': \'markdown\', \'_selectable\': False}, \'skip_api\': False, \'component_class_id\': \'0f1153c758be937c35028c4ae822697a\', \'key\': None, \'api_info\': {\'type\': \'string\'}, \'example_inputs\': \'# Hello!\'}, {\'id\': 12, \'type\': \'markdown\', \'props\': {\'value\': \'🟢 Prêt.\', \'show_label\': True, \'rtl\': False, \'latex_delimiters\': [{\'left\': \'$$\', \'right\': \'$$\', \'display\': True}], \'visible\': True, \'elem_classes\': [], \'sanitize_html\': True, \'line_breaks\': False, \'header_links\': False, \'show_copy_button\': False, \'name\': \'markdown\', \'_selectable\': False}, \'skip_api\': False, \'component_class_id\': \'0f1153c758be937c35028c4ae822697a\', \'key\': None, \'api_info\': {\'type\': \'string\'}, \'example_inputs\': \'# Hello!\'}, {\'id\': 13, \'type\': \'form\', \'props\': {\'scale\': 0, \'min_width\': 0, \'name\': \'form\'}, \'skip_api\': True, \'component_class_id\': \'25c3986aa066ed152a0514ddc4b3797d\', \'key\': None}, {\'id\': 14, \'type\': \'column\', \'props\': {\'scale\': 4, \'min_width\': 320, \'variant\': \'default\', \'visible\': True, \'show_progress\': False, \'name\': \'column\'}, \'skip_api\': True, \'component_class_id\': \'7ce27a96479bf1a7c28a716f8b829ac7\', \'key\': None}, {\'id\': 15, \'type\': \'plot\', \'props\': {\'format\': \'webp\', \'label\': \'Graphiques Financiers\', \'show_label\': True, \'container\': True, \'min_width\': 160, \'visible\': True, \'elem_classes\': [], \'name\': \'plot\', \'_selectable\': False}, \'skip_api\': False, \'component_class_id\': \'6a249a118d7f04e858769219b3f35ad1\', \'key\': None, \'api_info\': {\'properties\': {\'type\': {\'enum\': [\'altair\', \'bokeh\', \'plotly\', \'matplotlib\'], \'title\': \'Type\', \'type\': \'string\'}, \'plot\': {\'title\': \'Plot\', \'type\': \'string\'}}, \'required\': [\'type\', \'plot\'], \'title\': \'PlotData\', \'type\': \'object\'}, \'example_inputs\': None}], \'css\': None, \'connect_heartbeat\': False, \'js\': None, \'head\': None, \'title\': \'Bizon Dashboard\', \'space_id\': None, \'enable_queue\': True, \'show_error\': False, \'show_api\': True, \'is_colab\': False, \'max_file_size\': None, \'stylesheets\': [\'https://fonts.googleapis.com/css2?family=Outfit:wght@400;600&display=swap\', \'https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&display=swap\'], \'theme\': \'soft\', \'protocol\': \'sse_v3\', \'body_css\': {\'body_background_fill\': \'#fafaf9\', \'body_text_color\': \'#292524\', \'body_background_fill_dark\': \'#0f0e0d\', \'body_text_color_dark\': \'#f5f5f4\'}, \'fill_height\': False, \'fill_width\': False, \'theme_hash\': \'8039b1c5f99a3bcd562e36624c41d2aa318090b46960679da327abba595a9caf\', \'layout\': {\'id\': 0, \'children\': [{\'id\': 1}, {\'id\': 2, \'children\': [{\'id\': 3, \'children\': [{\'id\': 4}, {\'id\': 13, \'children\': [{\'id\': 5}, {\'id\': 6}, {\'id\': 7}]}, {\'id\': 8}, {\'id\': 9}, {\'id\': 10}, {\'id\': 11}, {\'id\': 12}]}, {\'id\': 14, \'children\': [{\'id\': 15}]}]}]}, \'dependencies\': [{\'id\': 0, \'targets\': [[8, \'click\']], \'inputs\': [5, 6, 7], \'outputs\': [15, 12], \'backend_fn\': True, \'js\': None, \'queue\': True, \'api_name\': \'update_ui\', \'scroll_to_output\': False, \'show_progress\': \'full\', \'batch\': False, \'max_batch_size\': 4, \'cancels\': [], \'types\': {\'generator\': False, \'cancel\': False}, \'collects_event_data\': False, \'trigger_after\': None, \'trigger_only_on_success\': False, \'trigger_mode\': \'once\', \'show_api\': True, \'zerogpu\': False, \'rendered_in\': None}, {\'id\': 1, \'targets\': [[0, \'load\']], \'inputs\': [5, 6, 7], \'outputs\': [15, 12], \'backend_fn\': True, \'js\': None, \'queue\': True, \'api_name\': \'update_ui_1\', \'scroll_to_output\': False, \'show_progress\': \'full\', \'batch\': False, \'max_batch_size\': 4, \'cancels\': [], \'types\': {\'generator\': False, \'cancel\': False}, \'collects_event_data\': False, \'trigger_after\': None, \'trigger_only_on_success\': False, \'trigger_mode\': \'once\', \'show_api\': True, \'zerogpu\': False, \'rendered_in\': None}], \'root\': \'http://127.0.0.1:7860\', \'username\': None}, \'gradio_api_info\': {\'named_endpoints\': {\'/update_ui\': {\'parameters\': [{\'label\': \'Actif Financier\', \'parameter_name\': \'ticker\', \'parameter_has_default\': True, \'parameter_default\': \'BTC-USD\', \'type\': {\'type\': \'string\', \'enum\': [\'BTC-USD\', \'ETH-USD\', \'AAPL\', \'MSFT\', \'TSLA\', \'NVDA\']}, \'python_type\': {\'type\': "Literal[\'BTC-USD\', \'ETH-USD\', \'AAPL\', \'MSFT\', \'TSLA\', \'NVDA\']", \'description\': \'\'}, \'component\': \'Dropdown\', \'example_input\': \'BTC-USD\'}, {\'label\': \'Profondeur Historique\', \'parameter_name\': \'period\', \'parameter_has_default\': True, \'parameter_default\': \'1y\', \'type\': {\'type\': \'string\', \'enum\': [\'3mo\', \'6mo\', \'1y\', \'2y\', \'5y\']}, \'python_type\': {\'type\': "Literal[\'3mo\', \'6mo\', \'1y\', \'2y\', \'5y\']", \'description\': \'\'}, \'component\': \'Dropdown\', \'example_input\': \'3mo\'}, {\'label\': \'Bougies (Intervalle)\', \'parameter_name\': \'interval\', \'parameter_has_default\': True, \'parameter_default\': \'1d\', \'type\': {\'type\': \'string\', \'enum\': [\'1d\', \'1wk\']}, \'python_type\': {\'type\': "Literal[\'1d\', \'1wk\']", \'description\': \'\'}, \'component\': \'Dropdown\', \'example_input\': \'1d\'}], \'returns\': [{\'label\': \'Graphiques Financiers\', \'type\': {\'properties\': {\'type\': {\'enum\': [\'altair\', \'bokeh\', \'plotly\', \'matplotlib\'], \'title\': \'Type\', \'type\': \'string\'}, \'plot\': {\'title\': \'Plot\', \'type\': \'string\'}}, \'required\': [\'type\', \'plot\'], \'title\': \'PlotData\', \'type\': \'object\'}, \'python_type\': {\'type\': "Dict(type: Literal[\'altair\', \'bokeh\', \'plotly\', \'matplotlib\'], plot: str)", \'description\': \'\'}, \'component\': \'Plot\'}, {\'label\': \'value_12\', \'type\': {\'type\': \'string\'}, \'python_type\': {\'type\': \'str\', \'description\': \'\'}, \'component\': \'Markdown\'}], \'show_api\': True}, \'/update_ui_1\': {\'parameters\': [{\'label\': \'Actif Financier\', \'parameter_name\': \'ticker\', \'parameter_has_default\': True, \'parameter_default\': \'BTC-USD\', \'type\': {\'type\': \'string\', \'enum\': [\'BTC-USD\', \'ETH-USD\', \'AAPL\', \'MSFT\', \'TSLA\', \'NVDA\']}, \'python_type\': {\'type\': "Literal[\'BTC-USD\', \'ETH-USD\', \'AAPL\', \'MSFT\', \'TSLA\', \'NVDA\']", \'description\': \'\'}, \'component\': \'Dropdown\', \'example_input\': \'BTC-USD\'}, {\'label\': \'Profondeur Historique\', \'parameter_name\': \'period\', \'parameter_has_default\': True, \'parameter_default\': \'1y\', \'type\': {\'type\': \'string\', \'enum\': [\'3mo\', \'6mo\', \'1y\', \'2y\', \'5y\']}, \'python_type\': {\'type\': "Literal[\'3mo\', \'6mo\', \'1y\', \'2y\', \'5y\']", \'description\': \'\'}, \'component\': \'Dropdown\', \'example_input\': \'3mo\'}, {\'label\': \'Bougies (Intervalle)\', \'parameter_name\': \'interval\', \'parameter_has_default\': True, \'parameter_default\': \'1d\', \'type\': {\'type\': \'string\', \'enum\': [\'1d\', \'1wk\']}, \'python_type\': {\'type\': "Literal[\'1d\', \'1wk\']", \'description\': \'\'}, \'component\': \'Dropdown\', \'example_input\': \'1d\'}], \'returns\': [{\'label\': \'Graphiques Financiers\', \'type\': {\'properties\': {\'type\': {\'enum\': [\'altair\', \'bokeh\', \'plotly\', \'matplotlib\'], \'title\': \'Type\', \'type\': \'string\'}, \'plot\': {\'title\': \'Plot\', \'type\': \'string\'}}, \'required\': [\'type\', \'plot\'], \'title\': \'PlotData\', \'type\': \'object\'}, \'python_type\': {\'type\': "Dict(type: Literal[\'altair\', \'bokeh\', \'plotly\', \'matplotlib\'], plot: str)", \'description\': \'\'}, \'component\': \'Plot\'}, {\'label\': \'value_12\', \'type\': {\'type\': \'string\'}, \'python_type\': {\'type\': \'str\', \'description\': \'\'}, \'component\': \'Markdown\'}], \'show_api\': True}}, \'unnamed_endpoints\': {}}}' not found in search path: '/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/gradio/templates'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/uvicorn/protocols/http/h11_impl.py", line 415, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self.scope, self.receive, self.send
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/fastapi/applications.py", line 1163, in __call__
+    await super().__call__(scope, receive, send)
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/starlette/applications.py", line 90, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/gradio/route_utils.py", line 761, in __call__
+    await self.app(scope, receive, send)
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/starlette/routing.py", line 660, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/starlette/routing.py", line 680, in app
+    await route.handle(scope, receive, send)
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/starlette/routing.py", line 276, in handle
+    await self.app(scope, receive, send)
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/fastapi/routing.py", line 134, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/fastapi/routing.py", line 120, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/fastapi/routing.py", line 674, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/fastapi/routing.py", line 330, in run_endpoint_function
+    return await run_in_threadpool(dependant.call, **values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/starlette/concurrency.py", line 32, in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/anyio/to_thread.py", line 63, in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        func, args, abandon_on_cancel=abandon_on_cancel, limiter=limiter
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/anyio/_backends/_asyncio.py", line 2518, in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/anyio/_backends/_asyncio.py", line 1002, in run
+    result = context.run(func, *args)
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/gradio/routes.py", line 447, in main
+    raise ValueError(
+    ...<2 lines>...
+    ) from err
+ValueError: Did you install Gradio from source files? You need to build the frontend by running /scripts/build_frontend.sh
+2026-04-14 21:46:04,048 - BizonDashboard - INFO - Ouverture App Bizon (Mac) → http://127.0.0.1:7860
+2026-04-14 21:46:04,700 - httpx - INFO - HTTP Request: GET https://api.gradio.app/pkg-version "HTTP/1.1 200 OK"
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/gradio/routes.py", line 432, in main
+    return templates.TemplateResponse(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        template,
+        ^^^^^^^^^
+    ...<4 lines>...
+        },
+        ^^
+    )
+    ^
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/starlette/templating.py", line 148, in TemplateResponse
+    template = self.get_template(name)
+  File "/Users/joshua/Desktop/bizon/src/ui/dashboard.py", line 34, in _safe_get_template
+    return _orig_get_template(self, name)
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/starlette/templating.py", line 115, in get_template
+    return self.env.get_template(name)
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/jinja2/environment.py", line 1016, in get_template
+    return self._load_template(name, globals)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/jinja2/environment.py", line 975, in _load_template
+    template = self.loader.load(self, name, self.make_globals(globals))
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/jinja2/loaders.py", line 126, in load
+    source, filename, uptodate = self.get_source(environment, name)
+                                 ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/jinja2/loaders.py", line 209, in get_source
+    raise TemplateNotFound(
+    ...<2 lines>...
+    )
+jinja2.exceptions.TemplateNotFound: '{\'request\': <starlette.requests.Request object at 0x112fb3ce0>, \'config\': {\'version\': \'4.44.1\', \'mode\': \'blocks\', \'app_id\': 17776988882030041188, \'dev_mode\': False, \'analytics_enabled\': True, \'components\': [{\'id\': 1, \'type\': \'markdown\', \'props\': {\'value\': "<h1 style=\'text-align: center; color: #7A4E2D; margin-top:20px;\'>🦬 Bizon Terminal — Mode Visualisation</h1>", \'show_label\': True, \'rtl\': False, \'latex_delimiters\': [{\'left\': \'$$\', \'right\': \'$$\', \'display\': True}], \'visible\': True, \'elem_classes\': [], \'sanitize_html\': True, \'line_breaks\': False, \'header_links\': False, \'show_copy_button\': False, \'name\': \'markdown\', \'_selectable\': False}, \'skip_api\': False, \'component_class_id\': \'0f1153c758be937c35028c4ae822697a\', \'key\': None, \'api_info\': {\'type\': \'string\'}, \'example_inputs\': \'# Hello!\'}, {\'id\': 2, \'type\': \'row\', \'props\': {\'variant\': \'default\', \'visible\': True, \'equal_height\': True, \'show_progress\': False, \'name\': \'row\'}, \'skip_api\': True, \'component_class_id\': \'d46191271dd560b85424da009a0dc603\', \'key\': None}, {\'id\': 3, \'type\': \'column\', \'props\': {\'scale\': 1, \'min_width\': 320, \'variant\': \'panel\', \'visible\': True, \'show_progress\': False, \'name\': \'column\'}, \'skip_api\': True, \'component_class_id\': \'7ce27a96479bf1a7c28a716f8b829ac7\', \'key\': None}, {\'id\': 4, \'type\': \'markdown\', \'props\': {\'value\': \'### ⚙️ Centre de Contrôle\', \'show_label\': True, \'rtl\': False, \'latex_delimiters\': [{\'left\': \'$$\', \'right\': \'$$\', \'display\': True}], \'visible\': True, \'elem_classes\': [], \'sanitize_html\': True, \'line_breaks\': False, \'header_links\': False, \'show_copy_button\': False, \'name\': \'markdown\', \'_selectable\': False}, \'skip_api\': False, \'component_class_id\': \'0f1153c758be937c35028c4ae822697a\', \'key\': None, \'api_info\': {\'type\': \'string\'}, \'example_inputs\': \'# Hello!\'}, {\'id\': 5, \'type\': \'dropdown\', \'props\': {\'choices\': [(\'BTC-USD\', \'BTC-USD\'), (\'ETH-USD\', \'ETH-USD\'), (\'AAPL\', \'AAPL\'), (\'MSFT\', \'MSFT\'), (\'TSLA\', \'TSLA\'), (\'NVDA\', \'NVDA\')], \'value\': \'BTC-USD\', \'type\': \'value\', \'allow_custom_value\': False, \'filterable\': True, \'label\': \'Actif Financier\', \'show_label\': True, \'container\': True, \'min_width\': 160, \'interactive\': True, \'visible\': True, \'elem_classes\': [], \'name\': \'dropdown\', \'_selectable\': False}, \'skip_api\': False, \'component_class_id\': \'6e5a28f56488c5f596f6a1f6be7f9893\', \'key\': None, \'api_info\': {\'type\': \'string\', \'enum\': [\'BTC-USD\', \'ETH-USD\', \'AAPL\', \'MSFT\', \'TSLA\', \'NVDA\']}, \'example_inputs\': \'BTC-USD\'}, {\'id\': 6, \'type\': \'dropdown\', \'props\': {\'choices\': [(\'3mo\', \'3mo\'), (\'6mo\', \'6mo\'), (\'1y\', \'1y\'), (\'2y\', \'2y\'), (\'5y\', \'5y\')], \'value\': \'1y\', \'type\': \'value\', \'allow_custom_value\': False, \'filterable\': True, \'label\': \'Profondeur Historique\', \'show_label\': True, \'container\': True, \'min_width\': 160, \'interactive\': True, \'visible\': True, \'elem_classes\': [], \'name\': \'dropdown\', \'_selectable\': False}, \'skip_api\': False, \'component_class_id\': \'6e5a28f56488c5f596f6a1f6be7f9893\', \'key\': None, \'api_info\': {\'type\': \'string\', \'enum\': [\'3mo\', \'6mo\', \'1y\', \'2y\', \'5y\']}, \'example_inputs\': \'3mo\'}, {\'id\': 7, \'type\': \'dropdown\', \'props\': {\'choices\': [(\'1d\', \'1d\'), (\'1wk\', \'1wk\')], \'value\': \'1d\', \'type\': \'value\', \'allow_custom_value\': False, \'filterable\': True, \'label\': \'Bougies (Intervalle)\', \'show_label\': True, \'container\': True, \'min_width\': 160, \'interactive\': True, \'visible\': True, \'elem_classes\': [], \'name\': \'dropdown\', \'_selectable\': False}, \'skip_api\': False, \'component_class_id\': \'6e5a28f56488c5f596f6a1f6be7f9893\', \'key\': None, \'api_info\': {\'type\': \'string\', \'enum\': [\'1d\', \'1wk\']}, \'example_inputs\': \'1d\'}, {\'id\': 8, \'type\': \'button\', \'props\': {\'value\': "📊 Actualiser l\'analyse", \'variant\': \'primary\', \'visible\': True, \'interactive\': True, \'elem_classes\': [], \'name\': \'button\', \'_selectable\': False}, \'skip_api\': True, \'component_class_id\': \'2de92426a4b11af4714a9439ed9eb599\', \'key\': None}, {\'id\': 9, \'type\': \'markdown\', \'props\': {\'value\': \'### 💻 Composants Système\', \'show_label\': True, \'rtl\': False, \'latex_delimiters\': [{\'left\': \'$$\', \'right\': \'$$\', \'display\': True}], \'visible\': True, \'elem_classes\': [], \'sanitize_html\': True, \'line_breaks\': False, \'header_links\': False, \'show_copy_button\': False, \'name\': \'markdown\', \'_selectable\': False}, \'skip_api\': False, \'component_class_id\': \'0f1153c758be937c35028c4ae822697a\', \'key\': None, \'api_info\': {\'type\': \'string\'}, \'example_inputs\': \'# Hello!\'}, {\'id\': 10, \'type\': \'markdown\', \'props\': {\'value\': "<span style=\'color: #4A7A4A; font-weight: bold;\'>🚀 Accélération matérielle CPU active (10 cœurs)</span>", \'show_label\': True, \'rtl\': False, \'latex_delimiters\': [{\'left\': \'$$\', \'right\': \'$$\', \'display\': True}], \'visible\': True, \'elem_classes\': [], \'sanitize_html\': True, \'line_breaks\': False, \'header_links\': False, \'show_copy_button\': False, \'name\': \'markdown\', \'_selectable\': False}, \'skip_api\': False, \'component_class_id\': \'0f1153c758be937c35028c4ae822697a\', \'key\': None, \'api_info\': {\'type\': \'string\'}, \'example_inputs\': \'# Hello!\'}, {\'id\': 11, \'type\': \'markdown\', \'props\': {\'value\': "<span style=\'color: #7A4E2D; font-size:0.9em;\'>Batch : 32 | Vitesse de calcul allouée : 100ms</span>", \'show_label\': True, \'rtl\': False, \'latex_delimiters\': [{\'left\': \'$$\', \'right\': \'$$\', \'display\': True}], \'visible\': True, \'elem_classes\': [], \'sanitize_html\': True, \'line_breaks\': False, \'header_links\': False, \'show_copy_button\': False, \'name\': \'markdown\', \'_selectable\': False}, \'skip_api\': False, \'component_class_id\': \'0f1153c758be937c35028c4ae822697a\', \'key\': None, \'api_info\': {\'type\': \'string\'}, \'example_inputs\': \'# Hello!\'}, {\'id\': 12, \'type\': \'markdown\', \'props\': {\'value\': \'🟢 Prêt.\', \'show_label\': True, \'rtl\': False, \'latex_delimiters\': [{\'left\': \'$$\', \'right\': \'$$\', \'display\': True}], \'visible\': True, \'elem_classes\': [], \'sanitize_html\': True, \'line_breaks\': False, \'header_links\': False, \'show_copy_button\': False, \'name\': \'markdown\', \'_selectable\': False}, \'skip_api\': False, \'component_class_id\': \'0f1153c758be937c35028c4ae822697a\', \'key\': None, \'api_info\': {\'type\': \'string\'}, \'example_inputs\': \'# Hello!\'}, {\'id\': 13, \'type\': \'form\', \'props\': {\'scale\': 0, \'min_width\': 0, \'name\': \'form\'}, \'skip_api\': True, \'component_class_id\': \'25c3986aa066ed152a0514ddc4b3797d\', \'key\': None}, {\'id\': 14, \'type\': \'column\', \'props\': {\'scale\': 4, \'min_width\': 320, \'variant\': \'default\', \'visible\': True, \'show_progress\': False, \'name\': \'column\'}, \'skip_api\': True, \'component_class_id\': \'7ce27a96479bf1a7c28a716f8b829ac7\', \'key\': None}, {\'id\': 15, \'type\': \'plot\', \'props\': {\'format\': \'webp\', \'label\': \'Graphiques Financiers\', \'show_label\': True, \'container\': True, \'min_width\': 160, \'visible\': True, \'elem_classes\': [], \'name\': \'plot\', \'_selectable\': False}, \'skip_api\': False, \'component_class_id\': \'6a249a118d7f04e858769219b3f35ad1\', \'key\': None, \'api_info\': {\'properties\': {\'type\': {\'enum\': [\'altair\', \'bokeh\', \'plotly\', \'matplotlib\'], \'title\': \'Type\', \'type\': \'string\'}, \'plot\': {\'title\': \'Plot\', \'type\': \'string\'}}, \'required\': [\'type\', \'plot\'], \'title\': \'PlotData\', \'type\': \'object\'}, \'example_inputs\': None}], \'css\': None, \'connect_heartbeat\': False, \'js\': None, \'head\': None, \'title\': \'Bizon Dashboard\', \'space_id\': None, \'enable_queue\': True, \'show_error\': False, \'show_api\': True, \'is_colab\': False, \'max_file_size\': None, \'stylesheets\': [\'https://fonts.googleapis.com/css2?family=Outfit:wght@400;600&display=swap\', \'https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&display=swap\'], \'theme\': \'soft\', \'protocol\': \'sse_v3\', \'body_css\': {\'body_background_fill\': \'#fafaf9\', \'body_text_color\': \'#292524\', \'body_background_fill_dark\': \'#0f0e0d\', \'body_text_color_dark\': \'#f5f5f4\'}, \'fill_height\': False, \'fill_width\': False, \'theme_hash\': \'8039b1c5f99a3bcd562e36624c41d2aa318090b46960679da327abba595a9caf\', \'layout\': {\'id\': 0, \'children\': [{\'id\': 1}, {\'id\': 2, \'children\': [{\'id\': 3, \'children\': [{\'id\': 4}, {\'id\': 13, \'children\': [{\'id\': 5}, {\'id\': 6}, {\'id\': 7}]}, {\'id\': 8}, {\'id\': 9}, {\'id\': 10}, {\'id\': 11}, {\'id\': 12}]}, {\'id\': 14, \'children\': [{\'id\': 15}]}]}]}, \'dependencies\': [{\'id\': 0, \'targets\': [(8, \'click\')], \'inputs\': [5, 6, 7], \'outputs\': [15, 12], \'backend_fn\': True, \'js\': None, \'queue\': True, \'api_name\': \'update_ui\', \'scroll_to_output\': False, \'show_progress\': \'full\', \'batch\': False, \'max_batch_size\': 4, \'cancels\': [], \'types\': {\'generator\': False, \'cancel\': False}, \'collects_event_data\': False, \'trigger_after\': None, \'trigger_only_on_success\': False, \'trigger_mode\': \'once\', \'show_api\': True, \'zerogpu\': False, \'rendered_in\': None}, {\'id\': 1, \'targets\': [(0, \'load\')], \'inputs\': [5, 6, 7], \'outputs\': [15, 12], \'backend_fn\': True, \'js\': None, \'queue\': True, \'api_name\': \'update_ui_1\', \'scroll_to_output\': False, \'show_progress\': \'full\', \'batch\': False, \'max_batch_size\': 4, \'cancels\': [], \'types\': {\'generator\': False, \'cancel\': False}, \'collects_event_data\': False, \'trigger_after\': None, \'trigger_only_on_success\': False, \'trigger_mode\': \'once\', \'show_api\': True, \'zerogpu\': False, \'rendered_in\': None}], \'root\': \'http://127.0.0.1:7860\', \'username\': None}, \'gradio_api_info\': {\'named_endpoints\': {\'/update_ui\': {\'parameters\': [{\'label\': \'Actif Financier\', \'parameter_name\': \'ticker\', \'parameter_has_default\': True, \'parameter_default\': \'BTC-USD\', \'type\': {\'type\': \'string\', \'enum\': [\'BTC-USD\', \'ETH-USD\', \'AAPL\', \'MSFT\', \'TSLA\', \'NVDA\']}, \'python_type\': {\'type\': "Literal[\'BTC-USD\', \'ETH-USD\', \'AAPL\', \'MSFT\', \'TSLA\', \'NVDA\']", \'description\': \'\'}, \'component\': \'Dropdown\', \'example_input\': \'BTC-USD\'}, {\'label\': \'Profondeur Historique\', \'parameter_name\': \'period\', \'parameter_has_default\': True, \'parameter_default\': \'1y\', \'type\': {\'type\': \'string\', \'enum\': [\'3mo\', \'6mo\', \'1y\', \'2y\', \'5y\']}, \'python_type\': {\'type\': "Literal[\'3mo\', \'6mo\', \'1y\', \'2y\', \'5y\']", \'description\': \'\'}, \'component\': \'Dropdown\', \'example_input\': \'3mo\'}, {\'label\': \'Bougies (Intervalle)\', \'parameter_name\': \'interval\', \'parameter_has_default\': True, \'parameter_default\': \'1d\', \'type\': {\'type\': \'string\', \'enum\': [\'1d\', \'1wk\']}, \'python_type\': {\'type\': "Literal[\'1d\', \'1wk\']", \'description\': \'\'}, \'component\': \'Dropdown\', \'example_input\': \'1d\'}], \'returns\': [{\'label\': \'Graphiques Financiers\', \'type\': {\'properties\': {\'type\': {\'enum\': [\'altair\', \'bokeh\', \'plotly\', \'matplotlib\'], \'title\': \'Type\', \'type\': \'string\'}, \'plot\': {\'title\': \'Plot\', \'type\': \'string\'}}, \'required\': [\'type\', \'plot\'], \'title\': \'PlotData\', \'type\': \'object\'}, \'python_type\': {\'type\': "Dict(type: Literal[\'altair\', \'bokeh\', \'plotly\', \'matplotlib\'], plot: str)", \'description\': \'\'}, \'component\': \'Plot\'}, {\'label\': \'value_12\', \'type\': {\'type\': \'string\'}, \'python_type\': {\'type\': \'str\', \'description\': \'\'}, \'component\': \'Markdown\'}], \'show_api\': True}, \'/update_ui_1\': {\'parameters\': [{\'label\': \'Actif Financier\', \'parameter_name\': \'ticker\', \'parameter_has_default\': True, \'parameter_default\': \'BTC-USD\', \'type\': {\'type\': \'string\', \'enum\': [\'BTC-USD\', \'ETH-USD\', \'AAPL\', \'MSFT\', \'TSLA\', \'NVDA\']}, \'python_type\': {\'type\': "Literal[\'BTC-USD\', \'ETH-USD\', \'AAPL\', \'MSFT\', \'TSLA\', \'NVDA\']", \'description\': \'\'}, \'component\': \'Dropdown\', \'example_input\': \'BTC-USD\'}, {\'label\': \'Profondeur Historique\', \'parameter_name\': \'period\', \'parameter_has_default\': True, \'parameter_default\': \'1y\', \'type\': {\'type\': \'string\', \'enum\': [\'3mo\', \'6mo\', \'1y\', \'2y\', \'5y\']}, \'python_type\': {\'type\': "Literal[\'3mo\', \'6mo\', \'1y\', \'2y\', \'5y\']", \'description\': \'\'}, \'component\': \'Dropdown\', \'example_input\': \'3mo\'}, {\'label\': \'Bougies (Intervalle)\', \'parameter_name\': \'interval\', \'parameter_has_default\': True, \'parameter_default\': \'1d\', \'type\': {\'type\': \'string\', \'enum\': [\'1d\', \'1wk\']}, \'python_type\': {\'type\': "Literal[\'1d\', \'1wk\']", \'description\': \'\'}, \'component\': \'Dropdown\', \'example_input\': \'1d\'}], \'returns\': [{\'label\': \'Graphiques Financiers\', \'type\': {\'properties\': {\'type\': {\'enum\': [\'altair\', \'bokeh\', \'plotly\', \'matplotlib\'], \'title\': \'Type\', \'type\': \'string\'}, \'plot\': {\'title\': \'Plot\', \'type\': \'string\'}}, \'required\': [\'type\', \'plot\'], \'title\': \'PlotData\', \'type\': \'object\'}, \'python_type\': {\'type\': "Dict(type: Literal[\'altair\', \'bokeh\', \'plotly\', \'matplotlib\'], plot: str)", \'description\': \'\'}, \'component\': \'Plot\'}, {\'label\': \'value_12\', \'type\': {\'type\': \'string\'}, \'python_type\': {\'type\': \'str\', \'description\': \'\'}, \'component\': \'Markdown\'}], \'show_api\': True}}, \'unnamed_endpoints\': {}}}' not found in search path: '/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/gradio/templates'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/uvicorn/protocols/http/h11_impl.py", line 415, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self.scope, self.receive, self.send
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/fastapi/applications.py", line 1163, in __call__
+    await super().__call__(scope, receive, send)
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/starlette/applications.py", line 90, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/gradio/route_utils.py", line 761, in __call__
+    await self.app(scope, receive, send)
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/starlette/routing.py", line 660, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/starlette/routing.py", line 680, in app
+    await route.handle(scope, receive, send)
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/starlette/routing.py", line 276, in handle
+    await self.app(scope, receive, send)
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/fastapi/routing.py", line 134, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/fastapi/routing.py", line 120, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/fastapi/routing.py", line 674, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/fastapi/routing.py", line 330, in run_endpoint_function
+    return await run_in_threadpool(dependant.call, **values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/starlette/concurrency.py", line 32, in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/anyio/to_thread.py", line 63, in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        func, args, abandon_on_cancel=abandon_on_cancel, limiter=limiter
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/anyio/_backends/_asyncio.py", line 2518, in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/anyio/_backends/_asyncio.py", line 1002, in run
+    result = context.run(func, *args)
+  File "/Users/joshua/Desktop/bizon/venv/lib/python3.14/site-packages/gradio/routes.py", line 447, in main
+    raise ValueError(
+    ...<2 lines>...
+    ) from err
+ValueError: Did you install Gradio from source files? You need to build the frontend by running /scripts/build_frontend.sh
+2026-04-14 21:48:54,624 - BizonMain - INFO - [SYSTEM] Démarrage de l'interface de contrôle...
+2026-04-14 21:48:54,961 - LauncherUI - INFO - [HARDWARE] Lancement de la détection...
+2026-04-14 21:48:54,967 - hardware_detector - INFO - Starting local hardware detection...
+2026-04-14 21:48:54,968 - LauncherUI - INFO - [HARDWARE] Détection terminée : Darwin | 10 cores
+2026-04-14 21:48:54,968 - LauncherUI - INFO - [UI] Mise à jour du rapport matériel sur l'interface.
+2026-04-14 21:49:01,225 - BizonMain - INFO - [UI] Signal de lancement du terminal reçu depuis LauncherUI.
+2026-04-14 21:49:01,225 - BizonMain - INFO - [PROCESS] Démarrage du Terminal de Trading (processus isolé)...
+2026-04-14 21:49:01,249 - BizonMain - INFO - [SYSTEM] Dashboard en cours — terminal maintenu ouvert (Ctrl+C pour quitter).
+2026-04-14 21:51:16,755 - BizonMain - INFO - [SYSTEM] Démarrage de l'interface de contrôle...
+2026-04-14 21:51:17,089 - LauncherUI - INFO - [HARDWARE] Lancement de la détection...
+2026-04-14 21:51:17,100 - hardware_detector - INFO - Starting local hardware detection...
+2026-04-14 21:51:17,100 - LauncherUI - INFO - [HARDWARE] Détection terminée : Darwin | 10 cores
+2026-04-14 21:51:17,100 - LauncherUI - INFO - [UI] Mise à jour du rapport matériel sur l'interface.
+2026-04-14 21:51:37,298 - BizonMain - INFO - [UI] Signal de lancement du terminal reçu depuis LauncherUI.
+2026-04-14 21:51:37,299 - BizonMain - INFO - [PROCESS] Démarrage du Terminal de Trading (processus isolé)...
+2026-04-14 21:51:37,324 - BizonMain - INFO - [SYSTEM] Dashboard en cours — terminal maintenu ouvert (Ctrl+C pour quitter).
+2026-04-14 21:53:18,740 - BizonMain - INFO - [SYSTEM] Démarrage de l'interface de contrôle...
+2026-04-14 21:53:19,073 - LauncherUI - INFO - [HARDWARE] Lancement de la détection...
+2026-04-14 21:53:19,084 - hardware_detector - INFO - Starting local hardware detection...
+2026-04-14 21:53:19,084 - LauncherUI - INFO - [HARDWARE] Détection terminée : Darwin | 10 cores
+2026-04-14 21:53:19,084 - LauncherUI - INFO - [UI] Mise à jour du rapport matériel sur l'interface.
+2026-04-14 21:53:21,846 - BizonMain - INFO - [UI] Signal de lancement du terminal reçu depuis LauncherUI.
+2026-04-14 21:53:21,846 - BizonMain - INFO - [PROCESS] Démarrage du Terminal de Trading (processus isolé)...
+2026-04-14 21:53:21,871 - BizonMain - INFO - [SYSTEM] Dashboard en cours — terminal maintenu ouvert (Ctrl+C pour quitter).
+2026-04-14 21:55:31,034 - BizonMain - INFO - [SYSTEM] Démarrage de l'interface de contrôle...
+2026-04-14 21:55:31,357 - LauncherUI - INFO - [HARDWARE] Lancement de la détection...
+2026-04-14 21:55:31,365 - hardware_detector - INFO - Starting local hardware detection...
+2026-04-14 21:55:31,366 - LauncherUI - INFO - [HARDWARE] Détection terminée : Darwin | 10 cores
+2026-04-14 21:55:31,366 - LauncherUI - INFO - [UI] Mise à jour du rapport matériel sur l'interface.
+2026-04-14 21:55:33,965 - BizonMain - INFO - [UI] Signal de lancement du terminal reçu depuis LauncherUI.
+2026-04-14 21:55:33,966 - BizonMain - INFO - [PROCESS] Démarrage du Terminal de Trading (processus isolé)...
+2026-04-14 21:55:33,983 - BizonMain - INFO - [SYSTEM] Dashboard en cours — terminal maintenu ouvert (Ctrl+C pour quitter).
+2026-04-14 21:58:08,857 - BizonMain - INFO - [SYSTEM] Démarrage de l'interface de contrôle...
+2026-04-14 21:58:09,165 - LauncherUI - INFO - [HARDWARE] Lancement de la détection...
+2026-04-14 21:58:09,176 - hardware_detector - INFO - Starting local hardware detection...
+2026-04-14 21:58:09,177 - LauncherUI - INFO - [HARDWARE] Détection terminée : Darwin | 10 cores
+2026-04-14 21:58:09,177 - LauncherUI - INFO - [UI] Mise à jour du rapport matériel sur l'interface.
+2026-04-14 21:58:10,638 - BizonMain - INFO - [UI] Signal de lancement du terminal reçu depuis LauncherUI.
+2026-04-14 21:58:10,638 - BizonMain - INFO - [PROCESS] Démarrage du Terminal de Trading (processus isolé)...
+2026-04-14 21:58:10,652 - BizonMain - INFO - [SYSTEM] Dashboard en cours — terminal maintenu ouvert (Ctrl+C pour quitter).
+2026-04-14 22:00:45,106 - BizonMain - INFO - [SYSTEM] Démarrage de l'interface de contrôle...
+2026-04-14 22:00:45,423 - LauncherUI - INFO - [HARDWARE] Lancement de la détection...
+2026-04-14 22:00:45,431 - hardware_detector - INFO - Starting local hardware detection...
+2026-04-14 22:00:45,431 - LauncherUI - INFO - [HARDWARE] Détection terminée : Darwin | 10 cores
+2026-04-14 22:00:45,432 - LauncherUI - INFO - [UI] Mise à jour du rapport matériel sur l'interface.
+2026-04-14 22:00:48,003 - BizonMain - INFO - [UI] Signal de lancement du terminal reçu depuis LauncherUI.
+2026-04-14 22:00:48,003 - BizonMain - INFO - [PROCESS] Démarrage du Terminal de Trading (processus isolé)...
+2026-04-14 22:00:48,018 - BizonMain - INFO - [SYSTEM] Dashboard en cours — terminal maintenu ouvert (Ctrl+C pour quitter).
+2026-04-14 22:03:23,332 - BizonMain - INFO - [SYSTEM] Démarrage de l'interface de contrôle...
+2026-04-14 22:03:23,652 - LauncherUI - INFO - [HARDWARE] Lancement de la détection...
+2026-04-14 22:03:23,662 - hardware_detector - INFO - Starting local hardware detection...
+2026-04-14 22:03:23,663 - LauncherUI - INFO - [HARDWARE] Détection terminée : Darwin | 10 cores
+2026-04-14 22:03:23,663 - LauncherUI - INFO - [UI] Mise à jour du rapport matériel sur l'interface.
+2026-04-14 22:03:47,554 - BizonMain - INFO - [UI] Signal de lancement du terminal reçu depuis LauncherUI.
+2026-04-14 22:03:47,554 - BizonMain - INFO - [PROCESS] Démarrage du Terminal de Trading (processus isolé)...
+2026-04-14 22:03:47,566 - BizonMain - INFO - [SYSTEM] Dashboard en cours — terminal maintenu ouvert (Ctrl+C pour quitter).
+2026-04-14 22:07:10,941 - BizonMain - INFO - [SYSTEM] Démarrage de l'interface de contrôle...
+2026-04-14 22:07:11,274 - LauncherUI - INFO - [HARDWARE] Lancement de la détection...
+2026-04-14 22:07:11,282 - hardware_detector - INFO - Starting local hardware detection...
+2026-04-14 22:07:11,282 - LauncherUI - INFO - [HARDWARE] Détection terminée : Darwin | 10 cores
+2026-04-14 22:07:11,282 - LauncherUI - INFO - [UI] Mise à jour du rapport matériel sur l'interface.
+2026-04-14 22:07:12,890 - BizonMain - INFO - [UI] Signal de lancement du terminal reçu depuis LauncherUI.
+2026-04-14 22:07:12,890 - BizonMain - INFO - [PROCESS] Démarrage du Terminal de Trading (processus isolé)...
+2026-04-14 22:07:12,910 - BizonMain - INFO - [SYSTEM] Dashboard en cours — terminal maintenu ouvert (Ctrl+C pour quitter).

@@ -1,8 +1,8 @@
-# 🦬 Projet Bizon
+# 🔮 Projet Cassandre
 
-Bienvenue dans le projet Bizon, le module de trading algorithmique et d'analyse de données intégré au **Projet Olympe**.
+Bienvenue dans le projet Cassandre, le module de trading algorithmique et d'analyse de données intégré au **Projet Olympe**.
 
-Ce projet a pour objectif de fournir un bot de trading complet, allant du backtesting sur des données historiques jusqu'au *paper trading* (mode test) et à l'exécution en mode réel, tout en mettant l'accent sur les performances, la stricte gestion des risques et la compatibilité en local grâce à son module de détection matérielle intelligent.
+Ce projet a pour objectif de fournir un bot de trading complet, allant du backtesting sur des données historiques jusqu'au *paper trading* (mode test) et à l'exécution en mode réel. Inspiré par l'oracle mythologique, Cassandre vise une précision analytique absolue tout en assurant une compatibilité locale optimale grâce à son module de détection matérielle intelligent.
 
 ## 🌟 Fonctionnalités Principales
 
@@ -55,7 +55,7 @@ Pour configurer le projet localement en un temps record (< 15 minutes) tout en r
    Testez les capacités de votre ordinateur avant le premier trade :
    ```bash
    python src/hardware/detector.py
-   # Vous pouvez aussi utiliser directement les lanceurs fournis: Lancer_Bizon.bat (Windows) ou Lancer_Bizon.command (macOS)
+   # Vous pouvez aussi utiliser directement les lanceurs fournis: Lancer_Cassandre.bat (Windows) ou Lancer_Cassandre.command (macOS)
    ```
 
 ## 📈 Lancer l'Application Dashboard
@@ -70,7 +70,7 @@ Le tableau de bord (Dashboard) s'ouvrira automatiquement, généralement sur l'a
 
 Ce module est développé pour le Projet Olympe (2025–2026).
 - **Performances ciblées :** Latence totale de signal à ordre < 500ms en mode Réel, et un recalcul des indicateurs < 100ms par bougie.
-- **Développements post-MVP  :** Intégration du module à l'assistant global "Projet Olympe" via commandes vocales ("Olympe, lance Bizon sur BTC en mode test 15 minutes"), ainsi qu'une approche portfolio avec stratégies basées sur modèles LSTM.
+- **Développements post-MVP  :** Intégration du module à l'assistant global "Projet Olympe" via commandes vocales ("Olympe, lance Cassandre sur BTC en mode test 15 minutes"), ainsi qu'une approche portfolio avec stratégies basées sur modèles LSTM.
 
 ---
-*Ce README et le projet dans son ensemble sont développés sous contraintes et validation des spécifications du Cahier des Charges Bizon v1.0.*
+*Ce README et le projet dans son ensemble sont développés sous contraintes et validation des spécifications du Cahier des Charges Cassandre v1.0.*

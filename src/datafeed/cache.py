@@ -4,10 +4,10 @@ import os
 
 class SQLiteCache:
     """
-    Gestionnaire de cache local pour les données de marché Bizon.
+    Gestionnaire de cache local pour les données de marché Cassandre.
     Utilise SQLite pour stocker les DataFrames Pandas.
     """
-    def __init__(self, db_path: str = "data/bizon_market_data.db"):
+    def __init__(self, db_path: str = "data/cassandre_market_data.db"):
         self.db_path = db_path
         # S'assurer que le dossier existe
         os.makedirs(os.path.dirname(os.path.abspath(self.db_path)), exist_ok=True)

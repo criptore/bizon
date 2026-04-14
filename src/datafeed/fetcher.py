@@ -15,51 +15,104 @@ class DataFetcher:
         self.use_cache = use_cache
         self.cache = SQLiteCache()
 
-    def fetch_historical_data(self, ticker: str, period: str = "1mo", interval: str = "1d", force_refresh: bool = False) -> Optional[pd.DataFrame]:
+    def _fetch_from_binance(self, ticker: str, interval: str = "1d", period: str = "1y") -> Optional[pd.DataFrame]:
+        """
+        Récupère les données depuis l'API publique de Binance (Cassandre)
+        """
+        try:
+            import requests
+            # Mapping ticker: BTC-USD -> BTCUSDT
+            symbol = ticker.replace("-USD", "USDT").replace("-", "").upper()
+            
+            # Mapping interval: 1d -> 1d, 1wk -> 1w
+            binance_interval = interval
+            if interval == "1wk": binance_interval = "1w"
+            elif interval == "1mo": binance_interval = "1M"
+            
+            # Calcul de la limite nécessaire (Période demandée + Buffer pour indicateurs)
+            # EMA 200 a besoin de 200 points de recul minimum
+            base_limit = 365
+            if period == "3mo": base_limit = 90
+            elif period == "6mo": base_limit = 180
+            elif period == "2y": base_limit = 730
+            elif period == "5y": base_limit = 1825
+            
+            limit = base_limit + 300 # Buffer de sécurité de 300 bars
+            if limit > 1500: limit = 1500 # Extension limite maximale API
+            
+            url = f"https://api.binance.com/api/v3/klines?symbol={symbol}&interval={binance_interval}&limit={limit}"
+            print(f"📡 [DataFeed] Appel API Binance (Buffer inclus) : {url}")
+            
+            response = requests.get(url, timeout=10)
+            response.raise_for_status()
+            data = response.json()
+            
+            # Format Binance: [OpenTime, Open, High, Low, Close, Volume, CloseTime, ...]
+            df = pd.DataFrame(data, columns=[
+                'OpenTime', 'Open', 'High', 'Low', 'Close', 'Volume', 
+                'CloseTime', 'QuoteAssetVolume', 'NumTrades', 
+                'TakerBuyBaseAssetVolume', 'TakerBuyQuoteAssetVolume', 'Ignore'
+            ])
+            
+            # Conversion stricte des types (OpenTime doit être int avant to_datetime)
+            df['OpenTime'] = pd.to_numeric(df['OpenTime'])
+            df['Date'] = pd.to_datetime(df['OpenTime'], unit='ms')
+            df.set_index('Date', inplace=True)
+            
+            cols_to_fix = ['Open', 'High', 'Low', 'Close', 'Volume']
+            for col in cols_to_fix:
+                df[col] = pd.to_numeric(df[col], errors='coerce')
+            
+            # Nettoyage : On enlève les NaNs et les valeurs à 0 qui cassent l'échelle du graphique
+            df = df.dropna(subset=cols_to_fix)
+            df = df[(df[cols_to_fix] > 0).all(axis=1)]
+            
+            return df[cols_to_fix]
+            
+        except Exception as e:
+            print(f"⚠️ [DataFeed] Échec Binance pour {ticker}: {e}")
+            return None
+
+    def fetch_historical_data(self, ticker: str, period: str = "1y", interval: str = "1d", force_refresh: bool = False) -> Optional[pd.DataFrame]:
         """
         Récupère l'historique des prix. 
-        Cherche d'abord dans le cache, sinon télécharge via yfinance.
+        Tente Binance pour la crypto, sinon yfinance.
         """
         start_time = time.time()
         
-        # 1. Vérification du cache SQLite
+        # 1. Vérification du cache
         if self.use_cache and not force_refresh:
             cached_df = self.cache.load(ticker, interval)
-            # Pour ce prototype (MVP), si le cache existe, on l'utilise
             if cached_df is not None and not cached_df.empty:
-                elapsed = round((time.time() - start_time) * 1000)
-                print(f"📦 [DataFeed] {ticker} ({interval}) chargé depuis le cache SQLite ({elapsed}ms)")
                 return cached_df
                 
-        # 2. Téléchargement depuis l'API yfinance
-        print(f"🌐 [DataFeed] Téléchargement de {ticker} ({period}, {interval}) via yfinance...")
+        # 2. Tentative Binance si Crypto
+        if "-USD" in ticker.upper() or ticker.upper() in ["BTC", "ETH", "SOL"]:
+            print(f"🌐 [DataFeed] Tentative de récupération via Binance (Public API)...")
+            df = self._fetch_from_binance(ticker, interval, period)
+            if df is not None and not df.empty:
+                if self.use_cache: self.cache.save(df, ticker, interval)
+                return df
+
+        # 3. Fallback yfinance
+        print(f"🌐 [DataFeed] Téléchargement via yfinance (Fallback)...")
         try:
-            # L'API yfinance gère les pool HTTP si 'threads=True' (quand workers > 1)
+            import requests
+            session = requests.Session()
+            session.headers.update({'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'})
+            
             use_threads = True if config.workers > 1 else False
-            df = yf.download(tickers=ticker, period=period, interval=interval, progress=False, threads=use_threads)
+            df = yf.download(tickers=ticker, period=period, interval=interval, progress=False, threads=use_threads, session=session)
             
-            if df is None or df.empty:
-                print(f"❌ [DataFeed] Aucune donnée trouvée pour {ticker}")
-                return None
+            if df is not None and not df.empty:
+                if isinstance(df.columns, pd.MultiIndex):
+                    df.columns = df.columns.get_level_values(0)
+                if df.index.name not in ["Date", "Datetime"]:
+                    df.index.name = "Date"
+                if self.use_cache: self.cache.save(df, ticker, interval)
+                return df
                 
-            # Les versions récentes de yfinance renvoient parfois un MultiIndex sur les colonnes. 
-            # On aplani les colonnes pour simplifier l'utilisation
-            if isinstance(df.columns, pd.MultiIndex):
-                # Extraire le premier niveau ex: 'Close', 'Open', etc...
-                df.columns = df.columns.get_level_values(0)
-            
-            # Normalisation (S'assurer que l'index s'appelle Date pour notre SQLite et pandas-ta)
-            if df.index.name != "Date" and df.index.name != "Datetime":
-                df.index.name = "Date"
-                
-            # 3. Sauvegarde dans le cache
-            if self.use_cache:
-                self.cache.save(df, ticker, interval)
-                
-            elapsed = round((time.time() - start_time) * 1000)
-            print(f"✅ [DataFeed] {ticker} téléchargé et mis en cache proprement ({elapsed}ms)")
-            return df
-            
         except Exception as e:
             print(f"❌ [DataFeed] Erreur yfinance pour {ticker}: {e}")
-            return None
+            
+        return None

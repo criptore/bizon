@@ -1,23 +1,23 @@
 import logging
 from src.hardware.detector import detect_hardware
 
-logger = logging.getLogger("bizon_config")
+logger = logging.getLogger("cassandre_config")
 
-class BizonConfig:
+class CassandreConfig:
     """
-    Singleton de configuration globale de Bizon.
-    S'auto-évalue au premier lancement pour adapter Bizon au Hardware actuel.
+    Singleton de configuration globale de Cassandre.
+    S'auto-évalue au premier lancement pour adapter Cassandre au Hardware actuel.
     """
     _instance = None
 
     def __new__(cls):
         if cls._instance is None:
-            cls._instance = super(BizonConfig, cls).__new__(cls)
+            cls._instance = super(CassandreConfig, cls).__new__(cls)
             cls._instance._initialize()
         return cls._instance
 
     def _initialize(self):
-        logger.info("⚡ Initialisation du contexte Hardware Bizon...")
+        logger.info("⚡ Initialisation du contexte Hardware Cassandre...")
         self.hw_report = detect_hardware()
         
         # Extraction des paramètres optimisés par le détecteur
@@ -35,4 +35,4 @@ class BizonConfig:
         self.hardware_badge = f"🚀 Accélération matérielle {gpu_device} active ({cpu_cores} cœurs)"
 
 # Instanciation globale importable par n'importe quel module
-config = BizonConfig()
+config = CassandreConfig()

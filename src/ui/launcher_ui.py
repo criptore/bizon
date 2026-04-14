@@ -47,7 +47,7 @@ class RoundedButton:
 class LauncherUI:
     def __init__(self, on_launch_callback):
         self.root = tk.Tk()
-        self.root.title("Bizon Control Center")
+        self.root.title("Cassandre Control Center")
         self.root.geometry("700x600")
         self.root.configure(bg=BG)
         self.on_launch_callback = on_launch_callback
@@ -65,7 +65,7 @@ class LauncherUI:
         header = tk.Frame(self.root, bg=BG, padx=30, pady=20)
         header.pack(fill=tk.X)
         
-        tk.Label(header, text="🦬 BIZON", font=self.title_font, fg=ACCENT, bg=BG).pack(side=tk.LEFT)
+        tk.Label(header, text="🔮 CASSANDRE", font=self.title_font, fg=ACCENT, bg=BG).pack(side=tk.LEFT)
         tk.Label(header, text="Central Control", font=font.Font(family=FAMILY, size=12), fg=TEXT_DIM, bg=BG).pack(side=tk.LEFT, padx=15, pady=(10, 0))
         
         # Hardware Report Area
@@ -89,20 +89,24 @@ class LauncherUI:
 
     def run_detection(self):
         # Afficher le message initial via root.after pour rester thread-safe
+        logger.info("[HARDWARE] Lancement de la détection...")
         self.root.after(0, lambda: self.report_area.insert(tk.END, "🔍 Analyse du matériel en cours...\n"))
         try:
             report = detect_hardware()
+            logger.info(f"[HARDWARE] Détection terminée : {report['os']['system']} | {report['cpu']['cores_logical']} cores")
             text = "\n📋 RAPPORT CONFIGURATION\n" + "═"*30 + "\n"
             text += f"Système : {report['os']['system']} {report['os']['machine']}\n"
             text += f"CPU     : {report['cpu']['cores_logical']} cœurs ({report['cpu']['frequency_mhz']} MHz)\n"
             text += f"RAM     : {report['ram']['total_gb']} Go\n"
             text += f"GPU     : {report['gpu']['device']}\n\n"
-            text += "✅ Profil Bizon optimisé :\n"
+            text += "✅ Profil Cassandre optimisé :\n"
             text += f" → Batch Size : {report['adaptation']['batch_size']}\n"
             text += f" → Workers : {report['adaptation']['workers']}\n"
             text += f" → Fréquence : {report['adaptation']['calc_frequency_ms']}ms\n"
+            logger.info("[UI] Mise à jour du rapport matériel sur l'interface.")
             self.root.after(0, lambda t=text: self._update_report(t))
         except Exception as e:
+            logger.error(f"[HARDWARE] Erreur lors de la détection : {e}")
             self.root.after(0, lambda err=e: self.report_area.insert(tk.END, f"\n❌ Erreur : {err}"))
 
     def run(self):
