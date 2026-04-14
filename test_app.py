@@ -12,7 +12,7 @@ from tkinter import scrolledtext, font
 
 # ─── Dependency installer ────────────────────────────────────────────────────
 
-DEPS = ["psutil", "torch"]
+DEPS = ["psutil"]
 
 
 def is_installed(pkg):
@@ -20,70 +20,30 @@ def is_installed(pkg):
     return importlib.util.find_spec(pkg) is not None
 
 
-def get_torch_install_cmd():
-    """
-    Return the right pip command to install torch depending on platform.
-    - Windows + NVIDIA GPU → CUDA build
-    - Mac arm64            → default (includes MPS support)
-    - Everything else      → CPU-only build (smaller, faster to download)
-    """
-    system = platform.system()
-
-    if system == "Windows":
-        try:
-            result = subprocess.run(
-                ["nvidia-smi"], capture_output=True, timeout=5
-            )
-            if result.returncode == 0:
-                return [
-                    sys.executable, "-m", "pip", "install", "--quiet",
-                    "torch",
-                    "--index-url", "https://download.pytorch.org/whl/cu121"
-                ]
-        except Exception:
-            pass
-        return [
-            sys.executable, "-m", "pip", "install", "--quiet",
-            "torch",
-            "--index-url", "https://download.pytorch.org/whl/cpu"
-        ]
-
-    return [sys.executable, "-m", "pip", "install", "--quiet", "torch"]
-
-
 def install_dependencies(log_fn):
     """Install missing packages, calling log_fn(msg) for progress updates."""
     missing = [p for p in DEPS if not is_installed(p)]
 
     if not missing:
-        log_fn("  ✅ Toutes les dépendances sont déjà installées.\n")
+        log_fn("  ✅ Toutes les dépendances matérielles (psutil) sont prêtes.\n")
         return True
 
     for pkg in missing:
         log_fn(f"  📦 Installation de {pkg}...")
         try:
-            if pkg == "torch":
-                cmd = get_torch_install_cmd()
-            else:
-                cmd = [sys.executable, "-m", "pip", "install", "--quiet", pkg]
-
-            result = subprocess.run(cmd, capture_output=True, text=True, timeout=300)
+            cmd = [sys.executable, "-m", "pip", "install", "--quiet", pkg]
+            result = subprocess.run(cmd, capture_output=True, text=True, timeout=120)
             if result.returncode == 0:
                 log_fn(f"   ✅ {pkg} installé avec succès.\n")
             else:
-                if pkg == "torch":
-                    log_fn(f"\n   ⚠️ Impossible d'installer torch. L'analyse GPU avancée sera ignorée.\n")
-                else:
-                    log_fn(f"\n   ❌ Erreur d'installation de {pkg}:\n{result.stderr}\n")
-                    return False
+                log_fn(f"\n   ❌ Erreur d'installation de {pkg}:\n{result.stderr}\n")
+                return False
         except subprocess.TimeoutExpired:
             log_fn(f"\n   ❌ Timeout — installation de {pkg} trop longue.\n")
-            if pkg != "torch":
-                return False
+            return False
         except Exception as e:
             log_fn(f"\n   ❌ {e}\n")
-            if pkg != "torch":
-                return False
+            return False
 
     return True
 
@@ -129,29 +89,47 @@ def detect_hardware(log_fn):
         "percent_used": vm.percent,
     }
 
-    gpu_info = {"device": "CPU (aucun GPU détecté)", "details": None}
-    try:
-        import importlib
-        torch = importlib.import_module("torch")
-        if torch.cuda.is_available():
-            name = torch.cuda.get_device_name(0)
-            vram = round(torch.cuda.get_device_properties(0).total_memory / 1024**3, 1)
-            gpu_info = {
-                "device":       f"CUDA — {name}",
-                "vram_gb":      vram,
-                "cuda_version": torch.version.cuda,
-            }
-            log_fn(f"   GPU NVIDIA détecté : {name}\n")
-        elif hasattr(torch.backends, "mps") and torch.backends.mps.is_available():
-            gpu_info = {
-                "device":  "MPS — Apple Silicon GPU",
-                "details": "Metal Performance Shaders (GPU intégré)",
-            }
-            log_fn("   GPU Apple Silicon (MPS) détecté\n")
-        else:
-            log_fn("   Aucun GPU compatible détecté (CUDA ou MPS)\n")
-    except Exception as e:
-        gpu_info["details"] = f"torch importé mais erreur : {e}"
+    # GPU — Native detection without torch footprint
+    gpu_info = {"device": "CPU (aucun GPU accélérateur détecté)", "details": None}
+    
+    # 1. Apple Silicon (MPS)
+    if platform.system() == "Darwin" and platform.machine() == "arm64":
+        gpu_info["device"] = "MPS — Apple Silicon GPU"
+        gpu_info["details"] = "Metal Performance Shaders (GPU intégré)"
+        log_fn("   🍎 GPU Apple Silicon (MPS) détecté\n")
+    else:
+        # 2. NVIDIA GPUs via nvidia-smi
+        has_nvidia = False
+        try:
+            res = subprocess.run(["nvidia-smi", "--query-gpu=name,memory.total", "--format=csv,noheader"],
+                                 capture_output=True, text=True, timeout=5)
+            if res.returncode == 0 and res.stdout.strip():
+                lines = res.stdout.strip().split("\n")
+                gpus = [line.strip() for line in lines if line.strip()]
+                device_name = gpus[0]
+                gpu_info["device"] = f"CUDA — {device_name}"
+                gpu_info["details"] = "Accélération NVIDIA disponible"
+                log_fn(f"   🎮 GPU NVIDIA détecté : {device_name}\n")
+                has_nvidia = True
+        except Exception:
+            pass
+
+        # 3. Standard Windows GPUs fallback
+        if not has_nvidia and platform.system() == "Windows":
+            try:
+                out = subprocess.check_output(
+                    ["powershell", "-NoProfile", "-Command", "Get-CimInstance Win32_VideoController | Select-Object -ExpandProperty Name"],
+                    text=True, stderr=subprocess.DEVNULL
+                )
+                names = [n.strip() for n in out.split("\n") if n.strip()]
+                if names:
+                    gpu_info["device"] = "Standard — " + " / ".join(names)
+                    gpu_info["details"] = "GPU standard (sans CUDA détecté)"
+                    log_fn(f"   ℹ️  GPU système ({gpu_info['device']})\n")
+                else:
+                    log_fn("   ℹ️  Aucun GPU avancé détecté\n")
+            except Exception:
+                log_fn("   ℹ️  Aucun GPU avancé détecté\n")
 
     py_info = {
         "version":    sys.version.split(" ")[0],
