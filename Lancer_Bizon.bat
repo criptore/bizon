@@ -2,17 +2,31 @@
 :: ============================================================
 ::  Bizon — Lanceur Windows (double-clic pour démarrer)
 :: ============================================================
+setlocal
+cd /d "%~dp0"
 
-:: Vérifie si Python est installé
+:: 1. Vérifie Python
 python --version >nul 2>&1
 if %errorlevel% neq 0 (
-    echo.
-    echo ERREUR: Python n'est pas trouve.
-    echo Telechargez Python 3 sur https://python.org/downloads
-    echo et cochez "Add Python to PATH" lors de l'installation.
+    echo ERREUR: Python est introuvable.
     pause
     exit /b
 )
 
-:: Lancement sans fenêtre de commande en arrière-plan
-start "" pythonw test_app.py
+:: 2. Vérifie et active le venv
+if not exist "venv" (
+    echo 📦 Création de l'environnement virtuel...
+    python -m venv venv
+)
+
+call venv\Scripts\activate
+
+:: 3. Installe/Met à jour les dépendances
+echo 🛠️ Verification des dependances...
+pip install --quiet -r requirements.txt
+
+:: 4. Lancement de l'application (sans fenêtre console persistante)
+echo 🚀 Lancement de Bizon...
+start "" pythonw main.py
+
+exit

@@ -8,3 +8,5 @@ build/
 dist/
 *.spec
 *.app/
+data/
+*.db

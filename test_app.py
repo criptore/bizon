@@ -642,7 +642,7 @@ def main():
     # ────────────────────────────────────────────
     tk.Label(
         outer,
-        text="Projet Olympus  ·  Module Bizon  ·  ECE Paris 2026",
+        text="Projet Olympus  ·  Module Bizon  ·  2026",
         font=small_font, fg=TEXT_DIM, bg=BG
     ).pack(pady=(0, 4))
 
