@@ -1,0 +1,12 @@
+psutil==5.9.8
+torch>=2.0.0
+transformers
+yfinance
+ccxt
+pandas-ta==0.3.14b0
+alpaca-trade-api
+binance-connector
+gradio>=4.0.0
+streamlit>=1.30.0
+plotly>=5.18.0
+scikit-learn
