@@ -1,5 +1,11 @@
 import logging
+import os
+from dotenv import load_dotenv
+
 from src.hardware.detector import detect_hardware
+
+# Charge le fichier .env
+load_dotenv()
 
 logger = logging.getLogger("cassandre_config")
 
@@ -33,6 +39,12 @@ class CassandreConfig:
         
         # Badge pour certifier à l'utilisateur que l'IA détecte correctement son moteur
         self.hardware_badge = f"🚀 Accélération matérielle {gpu_device} active ({cpu_cores} cœurs)"
+
+        # --- Configuration Broker (Binance) ---
+        self.binance_api_key = os.getenv("BINANCE_API_KEY", "")
+        self.binance_secret_key = os.getenv("BINANCE_SECRET_KEY", "")
+        # Testnet par défaut si non précisé explicitement à False
+        self.binance_testnet = os.getenv("BINANCE_TESTNET", "True").lower() in ("true", "1", "yes")
 
 # Instanciation globale importable par n'importe quel module
 config = CassandreConfig()
