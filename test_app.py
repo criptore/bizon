@@ -1,4 +1,4 @@
-# test_app.py — Bizon Hardware Tester
+# test_app.py — Cassandre Hardware Tester
 # Standalone, cross-platform (Mac & Windows)
 # Auto-installs: psutil, torch on first click
 import sys
@@ -160,14 +160,14 @@ def detect_hardware(log_fn):
         "ram":             ram_info,
         "gpu":             gpu_info,
         "python":          py_info,
-        "adaptation_bizon": adaptation,
+        "adaptation_cassandre": adaptation,
     }
 
 
 def format_report(report):
     lines = []
     lines.append("  ─────────────────────────────────────────")
-    lines.append("    BIZON — Rapport Matériel")
+    lines.append("    CASSANDRE — Rapport Matériel")
     lines.append("  ─────────────────────────────────────────\n")
 
     labels = {
@@ -176,7 +176,7 @@ def format_report(report):
         "ram":              "Mémoire RAM",
         "gpu":              "GPU / Accélérateur",
         "python":           "Python",
-        "adaptation_bizon": "Profil Bizon adapté",
+        "adaptation_cassandre": "Profil Cassandre adapté",
     }
 
     for key, title in labels.items():
@@ -431,7 +431,7 @@ def run_pipeline(state: AppState):
         append(state.output_txt, msg)
 
     log("  ══════════════════════════════════════\n")
-    log("    Bizon  ·  Initialisation\n")
+    log("    Cassandre  ·  Initialisation\n")
     log("  ══════════════════════════════════════\n\n")
 
     log("  Vérification des dépendances…\n")
@@ -461,7 +461,7 @@ def run_pipeline(state: AppState):
 
 def main():
     root = tk.Tk()
-    root.title("Bizon")
+    root.title("Cassandre")
     root.geometry("740x700")
     root.resizable(True, True)
     root.configure(bg=BG)
@@ -499,11 +499,11 @@ def main():
         # Title
         header_canvas.create_text(
             24, h // 2 - 14,
-            text="Bizon", anchor="w",
+            text="Cassandre", anchor="w",
             font=title_font, fill=ACCENT
         )
         header_canvas.create_text(
-            24 + title_font.measure("Bizon") + 10, h // 2 - 10,
+            24 + title_font.measure("Cassandre") + 10, h // 2 - 10,
             text="· Test Matériel", anchor="w",
             font=sub_font, fill=TEXT_DIM
         )
@@ -612,7 +612,7 @@ def main():
 
     append(
         output_txt,
-        "  Bienvenue dans Bizon · Test Matériel\n\n"
+        "  Bienvenue dans Cassandre · Test Matériel\n\n"
         "  Cliquez sur « Lancer la détection » pour analyser votre configuration.\n"
         "  Les dépendances (psutil, torch) seront installées automatiquement\n"
         "  si elles ne sont pas encore présentes sur votre système.\n"
@@ -642,7 +642,7 @@ def main():
     # ────────────────────────────────────────────
     tk.Label(
         outer,
-        text="Projet Olympus  ·  Module Bizon  ·  2026",
+        text="Projet Olympus  ·  Module Cassandre  ·  2026",
         font=small_font, fg=TEXT_DIM, bg=BG
     ).pack(pady=(0, 4))
 

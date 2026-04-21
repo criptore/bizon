@@ -74,7 +74,7 @@ def get_os_info():
 
 
 def adapt_parameters(hw_info):
-    """Adapt Bizon parameters based on detected hardware."""
+    """Adapt Cassandre parameters based on detected hardware."""
     ram_gb = hw_info["ram"]["total_gb"]
     gpu_type = hw_info["gpu"]["device"]
     cpu_cores = hw_info["cpu"]["cores_physical"] or 2
@@ -116,7 +116,7 @@ def detect_hardware():
 def main():
     hw_report = detect_hardware()
     report_json = json.dumps(hw_report, indent=4)
-    print("\n--- Bizon Hardware Report ---")
+    print("\n--- Cassandre Hardware Report ---")
     print(report_json)
     print("-----------------------------\n")
     return report_json

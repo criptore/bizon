@@ -13,8 +13,8 @@ def test_pipeline():
     print(" Lancement Test: Pipeline Cassandre ")
     print("====================================")
     
-    # Instance le pipeline (qui va initier le Broker Testnet, et les moteurs)
-    pipeline = TradingPipeline(use_broker=True)
+    # Instance le pipeline (Indicateurs et Strategie uniquement, sans Broker)
+    pipeline = TradingPipeline(use_broker=False)
     
     # Exécute 1 boucle sur le Bitcoin avec des bougies de 15 minutes
     signal = pipeline.run_cycle(symbol="BTC-USD", interval="15m", period="7d")

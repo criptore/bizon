@@ -1,5 +1,6 @@
 import pandas as pd
 import logging
+from src.config import config
 
 logger = logging.getLogger("CassandreStrategy")
 
@@ -7,16 +8,30 @@ class StrategyEngine:
     """
     Logique de Scalping Haute Fréquence (Expert).
     Analyse les micro-mouvements (BB + RSI) pour des réactions à la seconde.
+    L'agressivité est ajustée selon le profil de trading choisi.
     """
-    def __init__(self):
-        # Paramètres très sensibles
-        self.rsi_overbought = 70
-        self.rsi_oversold = 35
-        self.squeeze_threshold = 0.025 # 2.5% de compression
+    def __init__(self, profile_name="NORMAL ⚖️"):
+        self.profile_name = profile_name
+        self._apply_profile(profile_name)
+        self.squeeze_threshold = 0.025 # 2.5% de compression (commun à tous les profils)
 
-    def generate_signal(self, df: pd.DataFrame) -> dict:
+    def _apply_profile(self, profile_name):
+        """Charge les paramètres spécifiques au profil."""
+        profile = config.TRADING_PROFILES.get(profile_name, config.TRADING_PROFILES["NORMAL ⚖️"])
+        self.rsi_overbought = profile["rsi_overbought"]
+        self.rsi_oversold = profile["rsi_oversold"]
+        self.ai_confidence_threshold = profile["ai_confidence"]
+        logger.info(f"🎯 [Strategy] Profil '{profile_name}' appliqué (RSI: {self.rsi_oversold}/{self.rsi_overbought}, IA Conf: {self.ai_confidence_threshold*100}%)")
+
+    def set_profile(self, profile_name):
+        """Change le profil à la volée."""
+        self.profile_name = profile_name
+        self._apply_profile(profile_name)
+
+    def generate_signal(self, df: pd.DataFrame, ai_engine=None) -> dict:
         """
         Scanne la toute dernière respiration du marché.
+        Optionnellement, filtre par l'IA si un moteur est fourni.
         """
         if df is None or df.empty or len(df) < 2:
             return {"signal": "HOLD", "reason": "Not enough data"}
@@ -36,23 +51,37 @@ class StrategyEngine:
         # Mesure la volatilité (la contraction des bandes)
         band_width = (bb_upper - bb_lower) / bb_mid if bb_mid > 0 else 1.0
 
-        # === LOGIQUE ACHAT (SCALPING PRO) ===
-        # 1. Rebond Chirurgical (Le prix sort par le bas et RSI est écrasé)
+        technical_signal = "HOLD"
+        reason = f"Volatilité: {band_width*100:.1f}%"
+
+        # === ANALYSE TECHNIQUE (FAIBLE BRUIT) ===
         if current_price < bb_lower and current_rsi < self.rsi_oversold:
+            technical_signal = "BUY"
             reason = "BB Rebound (Dip)"
-            logger.info(f"⚡ [Expert] Signal ACHAT Rebond détecté: {current_price:.2f}$ (RSI={current_rsi:.1f})")
-            return {"signal": "BUY", "reason": reason, "price": current_price}
-            
-        # 2. Breakout Prédictif (Le ressort était comprimé et explose vers le haut)
-        if band_width < self.squeeze_threshold and current_price > bb_upper:
+        elif band_width < self.squeeze_threshold and current_price > bb_upper:
+            technical_signal = "BUY"
             reason = "Squeeze Breakout"
-            logger.info(f"⚡ [Expert] Signal ACHAT Explosion détectée: {current_price:.2f}$")
-            return {"signal": "BUY", "reason": reason, "price": current_price}
+        elif current_price > bb_upper and current_rsi > self.rsi_overbought:
+            technical_signal = "SELL"
+            reason = "BB Over-Extension"
 
-        # === LOGIQUE VENTE (PRÉ-SÉCURITÉ) ===
-        # Remarque : Le vrai Stop-Loss et Take-Profit sont gérés en amont dans le pipeline !
-        # Ici c'est uniquement si le TP n'a pas été atteint mais que le marché montre une fatigue extrême.
-        if current_price > bb_upper and current_rsi > self.rsi_overbought:
-            return {"signal": "SELL", "reason": "BB Over-Extension", "price": current_price}
+        # === FILTRE IA (CONFIRMATION EXPERTE) ===
+        if ai_engine and ai_engine.is_trained:
+            prob_up, ai_signal = ai_engine.predict(df)
+            
+            # Cas 1: Confirmation d'achat technique par l'IA (Seuil variable par profil)
+            if technical_signal == "BUY":
+                if prob_up > self.ai_confidence_threshold:
+                    logger.info(f"🔮 [IA] Signal ACHAT Technical validé par l'IA (Confiance: {prob_up*100:.1f}%)")
+                else:
+                    logger.info(f"🔮 [IA] Signal ACHAT Technical BLOQUÉ par l'IA (Confiance faible: {prob_up*100:.1f}% < {self.ai_confidence_threshold*100}%)")
+                    technical_signal = "HOLD"
+                    reason = "IA Low Confidence"
+            
+            # Cas 2: Signal IA pur si très fort (Seuil boosté de 15% par rapport au seuil du profil)
+            elif technical_signal == "HOLD" and prob_up > min(0.95, self.ai_confidence_threshold + 0.15):
+                technical_signal = "BUY"
+                reason = "IA Strong Predictive Buy"
+                logger.info(f"🚀 [IA] Signal ACHAT Prédictif Pur (Confiance: {prob_up*100:.1f}%)")
 
-        return {"signal": "HOLD", "reason": f"Volatilité: {band_width*100:.1f}%", "price": current_price}
+        return {"signal": technical_signal, "reason": reason, "price": current_price}

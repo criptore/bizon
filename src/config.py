@@ -43,8 +43,39 @@ class CassandreConfig:
         # --- Configuration Broker (Binance) ---
         self.binance_api_key = os.getenv("BINANCE_API_KEY", "")
         self.binance_secret_key = os.getenv("BINANCE_SECRET_KEY", "")
-        # Testnet par défaut si non précisé explicitement à False
         self.binance_testnet = os.getenv("BINANCE_TESTNET", "True").lower() in ("true", "1", "yes")
+
+    # --- PROFILS DE TRADING EXPERTS ---
+    # Ces profils ajustent l'agressivité de Cassandre
+    TRADING_PROFILES = {
+        "FULL SECURE 🛡️": {
+            "rsi_oversold": 30,
+            "rsi_overbought": 75,
+            "sl_pct": 0.008,          # -0.8%
+            "tp_pct": 0.012,          # +1.2%
+            "ai_confidence": 0.75,    # 75% requis
+            "risk_per_trade": 0.05,   # 5% du capital
+            "desc": "Sécurité maximale. Très peu de trades, mais haute fiabilité."
+        },
+        "NORMAL ⚖️": {
+            "rsi_oversold": 35,
+            "rsi_overbought": 70,
+            "sl_pct": 0.010,          # -1.0%
+            "tp_pct": 0.015,          # +1.5%
+            "ai_confidence": 0.65,    # 65% requis
+            "risk_per_trade": 0.10,   # 10% du capital
+            "desc": "Mode standard. Équilibre entre risque et opportunités."
+        },
+        "HYPER DYNAMIQUE 🚀": {
+            "rsi_oversold": 40,
+            "rsi_overbought": 65,
+            "sl_pct": 0.025,          # -2.5%
+            "tp_pct": 0.050,          # +5.0%
+            "ai_confidence": 0.55,    # 55% requis
+            "risk_per_trade": 0.20,   # 20% du capital
+            "desc": "Agressif. Profite de la moindre volatilité. Risque élevé."
+        }
+    }
 
 # Instanciation globale importable par n'importe quel module
 config = CassandreConfig()

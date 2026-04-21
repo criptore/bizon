@@ -1,37 +1,45 @@
 import logging
+from src.config import config
 
 logger = logging.getLogger("CassandreRiskManager")
 
 class RiskManager:
     """
-    Gestion des risques et sécurité pour les ordres de trading (US-08).
-    Calcule le dimensionnement des positions (Position Sizing) et vérifie les conditions de Stop-Loss (SL) et Take-Profit (TP).
+    Gestion des risques et sécurité pour les ordres de trading (Expert).
+    Ajuste automatiquement le Stop-Loss, Take-Profit et la Taille de Position
+    selon le profil de trading sélectionné.
     """
-    def __init__(self, broker=None):
+    def __init__(self, broker=None, profile_name="NORMAL ⚖️"):
         self.broker = broker
-        # Paramètres par défaut de sécurité (Haute Fiabilité)
-        self.max_risk_per_trade_pct = 0.05  # Risque global
-        self.default_stop_loss_pct = 0.010   # SL très serré : -1.0%
-        self.default_take_profit_pct = 0.015 # TP très sécurisé : +1.5%
+        self.profile_name = profile_name
+        self._apply_profile(profile_name)
+
+    def _apply_profile(self, profile_name):
+        """Charge les paramètres de risque depuis la config globale."""
+        profile = config.TRADING_PROFILES.get(profile_name, config.TRADING_PROFILES["NORMAL ⚖️"])
+        self.max_risk_per_trade_pct = profile["risk_per_trade"]
+        self.default_stop_loss_pct = profile["sl_pct"]
+        self.default_take_profit_pct = profile["tp_pct"]
+        logger.info(f"🛡️ [Risk] Profil '{profile_name}' appliqué (Risk: {self.max_risk_per_trade_pct*100}%, SL: -{self.default_stop_loss_pct*100}%, TP: +{self.default_take_profit_pct*100}%)")
+
+    def set_profile(self, profile_name):
+        """Change dynamiquement la gestion du risque."""
+        self.profile_name = profile_name
+        self._apply_profile(profile_name)
 
     def calculate_position_size(self, capital: float, current_price: float, risk_per_trade: float = None) -> float:
         """
-        Calcule la taille de position maximale en fonction du risque acceptable.
-        
-        :param capital: Capital total disponible (ex: USDT)
-        :param current_price: Prix actuel de l'actif
-        :param risk_per_trade: % de capital risqué sur ce trade (défaut: 2%)
-        :return: Quantité de l'actif à acheter
+        Calcule la taille de position maximale selon le profil.
+        Un profil 'DYNAMIQUE' autorisera une plus grande part de capital par trade.
         """
         risk = risk_per_trade if risk_per_trade is not None else self.max_risk_per_trade_pct
-        risk_amount = capital * risk
         
-        # Ce calcul est basique : il suppose qu'on perd le `risk_amount` si le stop-loss est touché.
-        # En réalité, Position Size = Risk Amount / (Entry Price - Stop Loss Price)
-        # Pour une version simplifiée (sans SL défini à l'avance), on limite la taille totale de l'investissement.
-        # Allocation agressive (50%) car le Stop-Loss est très serré à 1%
-        max_investment = capital * 0.50
+        # On limite l'investissement total par trade pour éviter l'all-in catastrophique.
+        # Secure: 25% max | Normal: 50% max | Dynamique: 75% max
+        limit_ratios = {"FULL SECURE 🛡️": 0.25, "NORMAL ⚖️": 0.50, "HYPER DYNAMIQUE 🚀": 0.75}
+        ratio = limit_ratios.get(self.profile_name, 0.50)
         
+        max_investment = capital * ratio
         quantity = max_investment / current_price
         return quantity
 
@@ -54,16 +62,9 @@ class RiskManager:
         return sl_price, tp_price
 
     def is_trade_safe(self, symbol: str, side: str, amount: float, current_price: float, available_balance: float):
-        """
-        Vérifie si le trade est autorisé selon les règles de gestion des risques.
-        A appeler juste avant le Broker.
-        """
-        # Vérification 1 : Fonds suffisants (avec une marge d'erreur pour les frais)
+        """Vérifie si le trade est autorisé selon les fonds disponibles."""
         cost = amount * current_price
         if side.lower() == 'buy' and cost > available_balance * 0.99:
             logger.warning(f"⚠️ [RiskManager] Fonds insuffisants pour {symbol}: Coût={cost}, Dispo={available_balance}")
             return False
-            
-        # Log de validation
-        logger.info(f"🛡️ [RiskManager] Trade {side} {symbol} validé par la sécurité. Coût estimé: {cost}")
         return True

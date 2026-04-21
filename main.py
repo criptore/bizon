@@ -88,8 +88,23 @@ def main():
         def on_launch():
             nonlocal dashboard_proc
             logger.info("[UI] Signal de lancement du terminal reçu depuis LauncherUI.")
-            dashboard_proc = launch_terminal_process()
-            ui.close()
+            
+            # 1. Feedback immédiat sur le bouton pour rassurer l'utilisateur
+            ui.launch_btn.set_processing()
+            
+            # 2. Lancement dans un thread séparé pour ne pas freezer l'interface
+            def _async_launch():
+                nonlocal dashboard_proc
+                try:
+                    dashboard_proc = launch_terminal_process()
+                    # 3. Fermeture de l'interface via root.after (thread-safe)
+                    logger.info("[PROCESS] Processus Dashboard initialisé. Fermeture Launcher...")
+                    ui.root.after(100, ui.close)
+                except Exception as e:
+                    logger.error(f"[ERROR] Échec du lancement asynchrone : {e}")
+            
+            import threading
+            threading.Thread(target=_async_launch, daemon=True).start()
 
         logger.info("[SYSTEM] Démarrage de l'interface de contrôle...")
         ui = LauncherUI(on_launch_callback=on_launch)

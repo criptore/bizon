@@ -1,107 +1,116 @@
 import pandas as pd
+import numpy as np
 import logging
 from src.engine.strategy import StrategyEngine
 from src.engine.indicators import IndicatorEngine
+from src.engine.intelligence import AIEngine
+from src.engine.risk_manager import RiskManager
+from src.config import config
 
 logger = logging.getLogger("CassandreBacktester")
 
 class Backtester:
     """
-    Simule la stratégie de Cassandre sur des données historiques (US09).
-    Traite la donnée ligne par ligne pour mimer les conditions réelles sans look-ahead bias.
+    Simule la stratégie de Cassandre sur des données historiques (Expert).
+    Prend désormais en compte les profils de trading (Secure, Normal, Dynamique).
     """
-    def __init__(self, initial_capital=10000.0):
+    def __init__(self, initial_capital=10000.0, use_ai=True, profile_name="NORMAL ⚖️"):
         self.initial_capital = initial_capital
-        self.strategy = StrategyEngine()
+        self.strategy = StrategyEngine(profile_name=profile_name)
+        self.risk_manager = RiskManager(profile_name=profile_name)
         self.indicator = IndicatorEngine()
+        self.ai = AIEngine() if use_ai else None
+        self.profile_name = profile_name
 
-    def run(self, df_raw: pd.DataFrame, risk_per_trade: float = 0.10) -> dict:
+    def run(self, df_raw: pd.DataFrame) -> dict:
         """
-        Exécute le backtest sur les données brutes.
-        Retourne les statistiques globales (P&L, nombre de trades).
+        Exécute le backtest sur les données brutes selon le profil choisi.
         """
-        if df_raw is None or len(df_raw) < 50:
-            return {"error": "Historique trop court pour le backtest (min 50 bougies)."}
+        if df_raw is None or len(df_raw) < 150:
+            return {"error": "Historique trop court pour le backtest expert (min 150 bougies)."}
             
-        logger.info(f"⏳ [Backtest] Précalcul des indicateurs ({len(df_raw)} bougies)...")
-        # 1. On calcule tous les indicateurs une seule fois pour la vitesse
+        logger.info(f"⏳ [Backtest] Précalcul ({len(df_raw)} bougies) | Profil: {self.profile_name}")
         df_ind = self.indicator.compute_all(df_raw)
-        df_ind = df_ind.dropna() # On retire les premières lignes (ex: les 200 premières pour l'EMA200)
+        df_ind = df_ind.dropna()
         
         if df_ind.empty:
-            return {"error": "Historique trop court après calcul de l'EMA 200."}
+            return {"error": "Historique trop court après calcul technique."}
 
-        # Variables d'état (Portefeuille local)
+        # PHASE D'ENTRAÎNEMENT IA
+        if self.ai:
+            self.ai.train(df_ind)
+
         capital = self.initial_capital
-        position_size = 0.0 # Quantité de coins détenus
+        position_size = 0.0
         entry_price = 0.0
         
         trades = []
+        equity_history = [self.initial_capital]
         win_trades = 0
         loss_trades = 0
 
-        logger.info(f"🚀 [Backtest] Début de la simulation (Capital départ: {capital}$) ...")
-        
-        # 2. Simulation passage d'ordre (boucle chronologique)
-        # On commence à l'index 1 car la stratégie regarde la ligne précédente
         for i in range(1, len(df_ind)):
-            # On recréé un dataframe miniature de 2 lignes pour ne pas tricher (look-ahead)
             current_slice = df_ind.iloc[i-1:i+1]
-            
-            signal_data = self.strategy.generate_signal(current_slice)
+            signal_data = self.strategy.generate_signal(current_slice, ai_engine=self.ai)
             signal = signal_data.get('signal', 'HOLD')
             current_price = signal_data.get('price', df_ind.iloc[i]['Close'])
             date = df_ind.index[i]
             
+            # Gestion simplifiée du Stop-Loss / Take-Profit pour le backtest
+            if position_size > 0:
+                pnl_pct = (current_price - entry_price) / entry_price
+                
+                # Check SL/TP du profil
+                if pnl_pct <= -self.risk_manager.default_stop_loss_pct or pnl_pct >= self.risk_manager.default_take_profit_pct:
+                    signal = "SELL"
+                    reason_exit = "SL Hit" if pnl_pct < 0 else "TP Hit"
+                
             if signal == "BUY" and position_size == 0:
-                # Acheter
-                investment = capital * risk_per_trade
-                position_size = investment / current_price
+                # Utilise le RiskManager pour définir la taille
+                position_size = self.risk_manager.calculate_position_size(capital, current_price)
+                investment = position_size * current_price
                 capital -= investment
                 entry_price = current_price
-                
-                trades.append({
-                    "date": date, "type": "BUY", "price": current_price, "amount": position_size
-                })
+                trades.append({"date": date, "type": "BUY", "price": current_price, "amount": position_size, "reason": signal_data.get("reason", "Technical")})
                 
             elif signal == "SELL" and position_size > 0:
-                # Vente totale de la position
                 gain = position_size * current_price
                 capital += gain
-                
                 profit_pct = (current_price - entry_price) / entry_price * 100
                 if profit_pct > 0: win_trades += 1
                 else: loss_trades += 1
-                
-                trades.append({
-                    "date": date, "type": "SELL", "price": current_price, 
-                    "profit_pct": profit_pct, "capital_after": capital
-                })
-                
+                trades.append({"date": date, "type": "SELL", "price": current_price, "profit_pct": profit_pct, "capital_after": capital})
                 position_size = 0.0
                 entry_price = 0.0
+            
+            current_equity = capital + (position_size * current_price)
+            equity_history.append(current_equity)
 
-        # Vente finale de clôture forcée si à la fin du backtest on a toujours une position ouverte
+        # Fermeture finale
         if position_size > 0:
-            final_price = df_ind.iloc[-1]['Close']
-            capital += position_size * final_price
-            profit_pct = (final_price - entry_price) / entry_price * 100
-            if profit_pct > 0: win_trades += 1
-            else: loss_trades += 1
+            capital += position_size * df_ind.iloc[-1]['Close']
+            equity_history[-1] = capital
+
+        # MÉTRIQUES
+        history_series = pd.Series(equity_history)
+        roll_max = history_series.cummax()
+        drawdowns = (history_series - roll_max) / roll_max
+        max_drawdown_pct = abs(drawdowns.min() * 100)
+        
+        returns = history_series.pct_change().dropna()
+        sharpe = (returns.mean() / returns.std() * np.sqrt(252)) if (len(returns) > 1 and returns.std() != 0) else 0.0
 
         total_trades = win_trades + loss_trades
-        net_profit = capital - self.initial_capital
-        roi_pct = (net_profit / self.initial_capital) * 100
-        win_rate = (win_trades / total_trades * 100) if total_trades > 0 else 0.0
+        roi_pct = ((capital - self.initial_capital) / self.initial_capital) * 100
         
-        logger.info(f"🏁 [Backtest] Fin. Net Profit: {net_profit:.2f}$ ({roi_pct:.2f}%). Win Rate: {win_rate:.1f}%")
-
         return {
             "initial_capital": self.initial_capital,
             "final_capital": capital,
-            "net_profit": net_profit,
             "roi_pct": roi_pct,
             "total_trades": total_trades,
-            "win_rate": win_rate,
-            "trades_log": trades
+            "win_rate": (win_trades / total_trades * 100) if total_trades > 0 else 0.0,
+            "sharpe_ratio": round(sharpe, 2),
+            "max_drawdown_pct": round(max_drawdown_pct, 2),
+            "ai_status": "Active" if self.ai and self.ai.is_trained else "Inactive",
+            "profile": self.profile_name
         }

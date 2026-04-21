@@ -1,14 +1,16 @@
 import pandas as pd
+import logging
 from ta.momentum import RSIIndicator
 from ta.trend import MACD, EMAIndicator
 from ta.volatility import BollingerBands
 
-from src.config import config
+logger = logging.getLogger("CassandreIndicators")
 
 class IndicatorEngine:
     """
-    Moteur de calcul des indicateurs techniques pour Bizon.
+    Moteur de calcul des indicateurs techniques pour Cassandre.
     Utilise la librairie 'ta' pour calculer de façon vectorisée (très performante).
+    Inclut désormais des métriques avancées pour l'IA.
     """
 
     def __init__(self, rsi_window=14, macd_fast=12, macd_slow=26, macd_sign=9, bb_window=20, bb_dev=2, ema_short=50, ema_long=200):
@@ -25,10 +27,13 @@ class IndicatorEngine:
     def compute_all(self, df: pd.DataFrame) -> pd.DataFrame:
         """
         Calcule tous les indicateurs techniques (Cassandre Native).
-        On ne supprime plus les NaNs pour préserver l'affichage des bougies.
         """
         if df is None or df.empty:
             return df
+            
+        # Sécurité : Vérification de la longueur pour la stabilité des EMAs (Warmup)
+        if len(df) < self.ema_long:
+            logger.warning(f"⚠️ Historique très court ({len(df)} bars) pour l'EMA {self.ema_long}. Précision réduite.")
             
         df_ind = df.copy()
 
@@ -48,8 +53,13 @@ class IndicatorEngine:
         df_ind["BB_Lower"] = bb_indicator.bollinger_lband()
         df_ind["BB_Mid"] = bb_indicator.bollinger_mavg()
 
-        # --- EMA (Pandas Native - Plus stable sur 3.14) ---
+        # --- EMA (Pandas Native) ---
         df_ind[f"EMA_{self.ema_short}"] = df_ind["Close"].ewm(span=self.ema_short, adjust=False).mean()
         df_ind[f"EMA_{self.ema_long}"] = df_ind["Close"].ewm(span=self.ema_long, adjust=False).mean()
+
+        # --- EXPERT FEATURES (Added for AI Engine) ---
+        df_ind['Returns'] = df_ind['Close'].pct_change()
+        df_ind['Volatility'] = df_ind['Returns'].rolling(window=10).std()
+        df_ind['Momentum'] = df_ind['Close'] / df_ind['Close'].shift(5) - 1
 
         return df_ind
