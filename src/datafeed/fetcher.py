@@ -101,7 +101,10 @@ class DataFetcher:
         # 3. Fallback yfinance (1.3.0+ — gère sa propre session curl_cffi)
         logger.debug("[DataFeed] Fallback yfinance pour %s", ticker)
         try:
-            df = yf.download(tickers=ticker, period=period, interval=interval,
+            # yfinance n'accepte pas les périodes sub-jour ("3h", "6h"…) — on mappe vers "1d"
+            _yf_valid = {"1d","5d","1mo","3mo","6mo","1y","2y","5y","10y","ytd","max"}
+            yf_period = period if period in _yf_valid else "1d"
+            df = yf.download(tickers=ticker, period=yf_period, interval=interval,
                              progress=False, auto_adjust=True)
 
             if df is not None and not df.empty:
