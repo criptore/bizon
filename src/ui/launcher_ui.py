@@ -30,7 +30,7 @@ class _MeanderBar(tk.Canvas):
     def __init__(self, parent, width=620, **kwargs):
         super().__init__(parent, width=width, height=13,
                          bg=BG, highlightthickness=0, **kwargs)
-        self._w = width
+        self._width = width
         self.bind("<Configure>", lambda e: self._draw(e.width))
         self._draw(width)
 
