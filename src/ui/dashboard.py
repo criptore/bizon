@@ -73,6 +73,7 @@ from src.config import config
 from src.broker.binance_broker import BinanceBroker
 from src.engine.backtester import Backtester
 from src.engine.pipeline import TradingPipeline
+from src.engine.baskets import BasketScanner, BASKET_NAMES, BASKETS
 
 logger = logging.getLogger("CassandreDashboard")
 
@@ -88,6 +89,8 @@ try:
 except Exception as _pipe_err:
     logger.warning(f"[Pipeline] Init partielle : {_pipe_err}")
     pipeline_instance = None
+
+_basket_scanner = BasketScanner(max_workers=4)
 
 # ── Design tokens ─────────────────────────────────────────────────────────────
 GOLD   = "#C4A35A"
@@ -730,6 +733,156 @@ def get_risk_params(profile: str):
     return RISK_PROFILES.get(profile, "")
 
 
+# ── Trading Automatique — scanner de bouquets ──────────────────────────────────
+def _price_fmt(price) -> str:
+    if price is None:
+        return "—"
+    p = float(price)
+    if p >= 1000:
+        return f"{p:.2f}"
+    if p >= 1:
+        return f"{p:.4f}"
+    if p >= 0.001:
+        return f"{p:.6f}"
+    return f"{p:.8f}"
+
+
+def _build_opp_cards(results: list) -> str:
+    _dim   = DARK['dim']
+    _dim2  = DARK['dim2']
+    _surf2 = DARK['surf2']
+
+    buys = [r for r in results if r["signal"] == "BUY"][:3]
+    sells = [r for r in results if r["signal"] == "SELL"][:3]
+    targets = buys if buys else sells
+    border_color = GREEN if buys else RED
+
+    if not targets:
+        return (
+            f"<div style='font-family:DM Mono,monospace;font-size:11px;"
+            f"color:{_dim};padding:8px 0'>"
+            f"Aucune opportunité détectée dans ce bouquet.</div>"
+        )
+
+    cards = ""
+    for r in targets:
+        change_raw = r["change"]
+        change_disp = (
+            f"{'+' if change_raw >= 0 else ''}{change_raw:.2f}%"
+            if change_raw is not None
+            else "—"
+        )
+        rsi_disp = str(r["rsi"]) if r["rsi"] is not None else "—"
+        cards += (
+            f"<div style='background:{_surf2};border:1px solid {border_color};"
+            f"border-radius:3px;padding:10px 14px;margin:0 10px 8px 0;"
+            f"display:inline-block;min-width:160px;vertical-align:top'>"
+            f"<div style='font-family:DM Mono,monospace;font-size:13px;font-weight:500;"
+            f"color:{border_color}'>{r['symbol']}</div>"
+            f"<div style='font-family:DM Mono,monospace;font-size:10px;"
+            f"color:{_dim2};margin-top:5px;line-height:1.7'>"
+            f"Prix : {_price_fmt(r['price'])}<br>"
+            f"Var  : {change_disp}<br>"
+            f"RSI  : {rsi_disp}</div>"
+            f"</div>"
+        )
+    label = "OPPORTUNITÉS D'ACHAT" if buys else "SIGNAUX DE VENTE"
+    return (
+        f"<div style='margin-bottom:6px;font-family:DM Sans,sans-serif;"
+        f"font-size:9px;color:{_dim};letter-spacing:1.8px;"
+        f"text-transform:uppercase'>{label}</div>"
+        f"<div style='display:flex;flex-wrap:wrap;padding:4px 0'>{cards}</div>"
+    )
+
+
+def scan_basket_ui(basket_name: str):
+    """Lance le scan d'un bouquet et retourne (DataFrame, HTML opps, HTML résumé, choices)."""
+    logger.info(f"[UI_EVENT] Scan bouquet : {basket_name}")
+    try:
+        results = _basket_scanner.scan_basket(basket_name)
+    except Exception as exc:
+        logger.exception("[scan_basket_ui] Erreur")
+        empty_df = pd.DataFrame(
+            columns=["Symbole", "Signal", "Prix", "Variation %", "RSI", "BB %"]
+        )
+        err_html = (
+            f"<div style='font-family:DM Mono,monospace;font-size:11px;"
+            f"color:{RED};padding:8px'>{exc}</div>"
+        )
+        return empty_df, err_html, err_html, gr.update(choices=[], value=[])
+
+    rows = []
+    for r in results:
+        rows.append([
+            r["symbol"],
+            r["signal"],
+            _price_fmt(r["price"]),
+            f"{r['change']:+.2f}" if r["change"] is not None else "—",
+            str(r["rsi"]) if r["rsi"] is not None else "—",
+            str(r["bb_pct"]) if r["bb_pct"] is not None else "—",
+        ])
+
+    df_display = pd.DataFrame(
+        rows, columns=["Symbole", "Signal", "Prix", "Variation %", "RSI", "BB %"]
+    )
+
+    n_buy  = sum(1 for r in results if r["signal"] == "BUY")
+    n_sell = sum(1 for r in results if r["signal"] == "SELL")
+    n_hold = sum(1 for r in results if r["signal"] == "HOLD")
+    n_err  = sum(1 for r in results if r["signal"] == "ERREUR")
+
+    _dim  = DARK['dim']
+    _dim2 = DARK['dim2']
+    summary_html = (
+        f"<div style='font-family:DM Mono,monospace;font-size:11px;line-height:2'>"
+        f"<span style='color:{GREEN}'>▲ BUY    : {n_buy}</span><br>"
+        f"<span style='color:{RED}'>▼ SELL   : {n_sell}</span><br>"
+        f"<span style='color:{_dim2}'>— HOLD   : {n_hold}</span><br>"
+        f"<span style='color:{_dim}'>✕ ERREUR : {n_err}</span>"
+        f"</div>"
+    )
+
+    opps_html = _build_opp_cards(results)
+
+    valid_symbols = [
+        r["symbol"] for r in results if r["signal"] in ("BUY", "HOLD") and r["price"]
+    ]
+
+    return df_display, opps_html, summary_html, gr.update(choices=valid_symbols, value=[])
+
+
+def start_multi_bot_ui(symbols, capital: float = 100.0):
+    if not symbols:
+        yield "Aucun actif sélectionné. Choisissez des actifs dans la liste après un scan."
+        return
+    if pipeline_instance is None:
+        yield "Pipeline indisponible — clés API Binance non configurées."
+        return
+
+    capital = float(capital or 100.0)
+    if capital < 10:
+        yield "Capital minimum : 10 USDT. Augmentez le montant alloué."
+        return
+
+    # Vérification du solde disponible avant de démarrer
+    if broker_connected:
+        try:
+            available = broker_instance.get_balance("USDT")
+            if available < capital:
+                yield (
+                    f"Solde insuffisant : {available:.2f} USDT disponibles, "
+                    f"{capital:.2f} USDT requis.\n"
+                    f"Réduisez le capital alloué ou rechargez votre compte."
+                )
+                return
+        except Exception:
+            pass  # Ne pas bloquer si la vérification échoue
+
+    yield from pipeline_instance.live_multi_trading_loop(
+        symbols=list(symbols), capital=capital
+    )
+
+
 # ── UI builder ─────────────────────────────────────────────────────────────────
 def launch_dashboard(share=False, standalone=True):
 
@@ -885,7 +1038,127 @@ def launch_dashboard(share=False, standalone=True):
                     outputs=[plot_output, an_status, balance_display]
                 )
 
-            # ── Tab 3 : Paramètres ────────────────────────────────────────────
+            # ── Tab 3 : Trading Automatique ───────────────────────────────────
+            with gr.TabItem("Trading Automatique"):
+                with gr.Row(equal_height=True):
+
+                    # Left panel
+                    with gr.Column(scale=0, min_width=270, elem_id="left-panel"):
+                        gr.HTML("<span class='section-label'>Scanner — Bouquets</span>")
+
+                        basket_dd = gr.Dropdown(
+                            choices=BASKET_NAMES,
+                            value=BASKET_NAMES[0],
+                            label="Bouquet",
+                            container=True,
+                        )
+                        scan_btn = gr.Button("Scanner le bouquet", variant="primary")
+
+                        gr.HTML("<div class='cassandre-divider'></div>")
+                        gr.HTML("<span class='section-label'>Résumé du scan</span>")
+
+                        scan_summary = gr.HTML(
+                            f"<div style='font-family:DM Mono,monospace;font-size:11px;"
+                            f"color:{DARK['dim']};padding:4px 0'>"
+                            f"Aucun scan lancé.</div>"
+                        )
+
+                        gr.HTML("<div class='cassandre-divider'></div>")
+                        gr.HTML(
+                            "<span class='section-label'>Sélection pour trading</span>"
+                        )
+
+                        auto_symbols_dd = gr.Dropdown(
+                            choices=[],
+                            multiselect=True,
+                            label="Actifs à trader (multi-sélection)",
+                            interactive=True,
+                            container=True,
+                        )
+
+                        auto_capital = gr.Number(
+                            value=100,
+                            minimum=10,
+                            label="Capital alloué (USDT)",
+                            info="Montant minimum requis pour démarrer le bot",
+                        )
+
+                        with gr.Row():
+                            auto_start_btn = gr.Button(
+                                "Activer", variant="primary", scale=1
+                            )
+                            auto_stop_btn = gr.Button(
+                                "Arrêter", variant="stop", scale=1
+                            )
+
+                        gr.Markdown(
+                            f"<span style='font-family:DM Mono,monospace;font-size:10px;"
+                            f"color:{DARK['dim2']}'>Bot multi-actifs : "
+                            f"<span style='color:{RED}'>En veille</span></span>"
+                        )
+
+                    # Right content
+                    with gr.Column(scale=1):
+                        gr.HTML("<span class='section-label'>Résultats du scan</span>")
+
+                        scan_table = gr.Dataframe(
+                            headers=[
+                                "Symbole", "Signal", "Prix",
+                                "Variation %", "RSI", "BB %",
+                            ],
+                            datatype=["str", "str", "str", "str", "str", "str"],
+                            row_count=(10, "dynamic"),
+                            col_count=(6, "fixed"),
+                            interactive=False,
+                            wrap=False,
+                        )
+
+                        gr.HTML("<div class='cassandre-divider'></div>")
+                        gr.HTML(
+                            "<span class='section-label'>Meilleures opportunités</span>"
+                        )
+
+                        opps_html = gr.HTML(
+                            f"<div style='font-family:DM Mono,monospace;font-size:11px;"
+                            f"color:{DARK['dim']};padding:8px 0'>"
+                            f"Lancez un scan pour voir les opportunités.</div>"
+                        )
+
+                        gr.HTML("<div class='cassandre-divider'></div>")
+                        gr.HTML(
+                            "<span class='section-label'>"
+                            "Journal de trading automatique</span>"
+                        )
+
+                        auto_logs = gr.Textbox(
+                            value=(
+                                "[OK]  Module Trading Automatique initialisé.\n"
+                                ">  Sélectionnez un bouquet et lancez le scan."
+                            ),
+                            lines=7,
+                            interactive=False,
+                            show_label=False,
+                            elem_id="bot-console",
+                        )
+
+                # Events — Trading Automatique
+                scan_btn.click(
+                    fn=scan_basket_ui,
+                    inputs=[basket_dd],
+                    outputs=[scan_table, opps_html, scan_summary, auto_symbols_dd],
+                )
+                auto_start_btn.click(
+                    fn=start_multi_bot_ui,
+                    inputs=[auto_symbols_dd, auto_capital],
+                    outputs=[auto_logs],
+                )
+                auto_stop_btn.click(
+                    fn=stop_bot_ui,
+                    inputs=[],
+                    outputs=[auto_logs],
+                )
+
+            # ── Tab 4 : Paramètres ────────────────────────────────────────────
             with gr.TabItem("Paramètres"):
                 with gr.Column(elem_id="settings-tab"):
                     settings_sections = [

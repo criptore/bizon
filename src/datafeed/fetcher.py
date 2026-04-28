@@ -1,3 +1,4 @@
+import logging
 import yfinance as yf
 import pandas as pd
 from typing import Optional
@@ -5,6 +6,9 @@ import time
 
 from src.config import config
 from .cache import SQLiteCache
+
+logger = logging.getLogger("CassandreDataFetcher")
+
 
 class DataFetcher:
     """
@@ -41,7 +45,7 @@ class DataFetcher:
             if limit > 1500: limit = 1500 # Extension limite maximale API
             
             url = f"https://api.binance.com/api/v3/klines?symbol={symbol}&interval={binance_interval}&limit={limit}"
-            print(f"📡 [DataFeed] Appel API Binance (Buffer inclus) : {url}")
+            logger.debug("[DataFeed] Appel API Binance : %s", url)
             
             response = requests.get(url, timeout=10)
             response.raise_for_status()
@@ -70,7 +74,7 @@ class DataFetcher:
             return df[cols_to_fix]
             
         except Exception as e:
-            print(f"⚠️ [DataFeed] Échec Binance pour {ticker}: {e}")
+            logger.debug("[DataFeed] Echec Binance pour %s: %s", ticker, e)
             return None
 
     def fetch_historical_data(self, ticker: str, period: str = "1y", interval: str = "1d", force_refresh: bool = False) -> Optional[pd.DataFrame]:
@@ -88,31 +92,26 @@ class DataFetcher:
                 
         # 2. Tentative Binance si Crypto
         if "-USD" in ticker.upper() or ticker.upper() in ["BTC", "ETH", "SOL"]:
-            print(f"🌐 [DataFeed] Tentative de récupération via Binance (Public API)...")
+            logger.debug("[DataFeed] Tentative Binance pour %s", ticker)
             df = self._fetch_from_binance(ticker, interval, period)
             if df is not None and not df.empty:
                 if self.use_cache: self.cache.save(df, ticker, interval)
                 return df
 
-        # 3. Fallback yfinance
-        print(f"🌐 [DataFeed] Téléchargement via yfinance (Fallback)...")
+        # 3. Fallback yfinance (1.3.0+ — gère sa propre session curl_cffi)
+        logger.debug("[DataFeed] Fallback yfinance pour %s", ticker)
         try:
-            import requests
-            session = requests.Session()
-            session.headers.update({'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'})
-            
-            use_threads = True if config.workers > 1 else False
-            df = yf.download(tickers=ticker, period=period, interval=interval, progress=False, threads=use_threads, session=session)
-            
+            df = yf.download(tickers=ticker, period=period, interval=interval,
+                             progress=False, auto_adjust=True)
+
             if df is not None and not df.empty:
                 if isinstance(df.columns, pd.MultiIndex):
                     df.columns = df.columns.get_level_values(0)
-                if df.index.name not in ["Date", "Datetime"]:
-                    df.index.name = "Date"
+                df.index.name = "Date"
                 if self.use_cache: self.cache.save(df, ticker, interval)
                 return df
-                
+
         except Exception as e:
-            print(f"❌ [DataFeed] Erreur yfinance pour {ticker}: {e}")
+            logger.warning("[DataFeed] Erreur yfinance pour %s: %s", ticker, e)
             
         return None

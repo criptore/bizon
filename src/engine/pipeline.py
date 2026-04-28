@@ -43,7 +43,7 @@ class TradingPipeline:
         # Statut du bot (Boucle asynchrone)
         self.is_running = False
 
-    def run_cycle(self, symbol="BTC-USD", interval="15m", period="7d", fast_check_only=False):
+    def run_cycle(self, symbol="BTC-USD", interval="15m", period="7d", fast_check_only=False, max_capital: float = None):
         """
         Exécute 1 boucle d'analyse.
         Si fast_check_only, vérifie uniquement les TP/SL actuels.
@@ -102,7 +102,9 @@ class TradingPipeline:
             base_balance = self.broker.get_balance(asset)
             
             if signal == "BUY" and self.current_position == 0:
-                amount_to_buy = self.risk_manager.calculate_position_size(capital=quote_balance, current_price=price)
+                # Respecter le plafond de capital alloué si défini
+                effective_capital = min(quote_balance, max_capital) if max_capital else quote_balance
+                amount_to_buy = self.risk_manager.calculate_position_size(capital=effective_capital, current_price=price)
                 if self.risk_manager.is_trade_safe(symbol, 'buy', amount_to_buy, price, quote_balance):
                     sl_price, tp_price = self.risk_manager.calculate_sl_tp_prices('buy', price)
                     
@@ -151,35 +153,109 @@ class TradingPipeline:
         """
         logs = ["=== ⚡ MODE EXPERT SCALPING ACTIVÉ (3s) ===\n"]
         self.start_bot()
-        
+
         while self.is_running:
             try:
                 # 1. On lance le cycle HFT (Intervalle forcé dans la fonction en 1m)
                 msg, sig = self.run_cycle(symbol=symbol, period="3h", interval="1m")
-                
+
                 # 2. Ajout au log
                 logs.append(msg)
-                
+
                 # Bridage strict des logs pour la propreté de l'interface
-                if len(logs) > 8: 
-                    logs.pop(1) 
-                    
+                if len(logs) > 8:
+                    logs.pop(1)
+
                 display_text = "\n".join(logs)
-                
+
                 # 3. Renvoi à l'interface
                 yield display_text
-                
+
                 # 4. Attente active hyper agressive de 3 secondes
                 for _ in range(3):
                     if not self.is_running: break
                     time.sleep(1)
-                    
+
             except Exception as e:
                 logger.error(f"Erreur dans la boucle Live: {e}")
                 logs.append(f"❌ [ERREUR SYSTÈME] {str(e)}")
                 yield "\n".join(logs)
                 time.sleep(5)
-                
+
         # Fin de boucle
         logs.append(f"[{datetime.now().strftime('%H:%M:%S')}] 🛑 Bot arrêté par l'utilisateur.")
+        yield "\n".join(logs)
+
+    def live_multi_trading_loop(self, symbols: list, capital: float = 100.0):
+        """
+        Générateur multi-actifs — cycle sur tous les symboles sélectionnés.
+        À chaque cycle, analyse un symbole à la fois en rotation.
+        :param capital: Capital maximum alloué en USDT pour ce portefeuille de bouquet.
+        """
+        if not symbols:
+            yield "Aucun actif sélectionné."
+            return
+
+        n = len(symbols)
+        logs = [
+            f"=== 🌐 MODE MULTI-ACTIFS — {n} actif(s) ===",
+            f"    Capital alloué : {capital:.2f} USDT\n",
+        ]
+        self.start_bot()
+
+        while self.is_running:
+            # Contrôle du capital restant avant chaque cycle
+            if self.broker:
+                try:
+                    available = self.broker.get_balance("USDT")
+                    if available < capital * 0.05:  # < 5 % du capital alloué
+                        logs.append(
+                            f"[{datetime.now().strftime('%H:%M:%S')}]"
+                            f" ⛔ Capital épuisé ({available:.2f} USDT). Bot stoppé."
+                        )
+                        yield "\n".join(logs)
+                        self.stop_bot()
+                        return
+                except Exception:
+                    pass
+
+            for symbol in symbols:
+                if not self.is_running:
+                    break
+                try:
+                    msg, _ = self.run_cycle(
+                        symbol=symbol, period="3h", interval="1m",
+                        max_capital=capital / len(symbols),
+                    )
+                    logs.append(msg)
+                    if len(logs) > 18:
+                        logs.pop(2)
+                    yield "\n".join(logs)
+                    for _ in range(2):
+                        if not self.is_running:
+                            break
+                        time.sleep(1)
+                except Exception as exc:
+                    logger.error(f"[MultiBot] {symbol} : {exc}")
+                    logs.append(f"❌ [{symbol}] {exc}")
+                    yield "\n".join(logs)
+                    time.sleep(3)
+
+            if self.is_running:
+                pause_msg = (
+                    f"[{datetime.now().strftime('%H:%M:%S')}]"
+                    f" ⏱ Cycle terminé — prochain dans 10 s…"
+                )
+                logs.append(pause_msg)
+                if len(logs) > 18:
+                    logs.pop(2)
+                yield "\n".join(logs)
+                for _ in range(10):
+                    if not self.is_running:
+                        break
+                    time.sleep(1)
+
+        logs.append(
+            f"[{datetime.now().strftime('%H:%M:%S')}] 🛑 Bot multi-actifs arrêté."
+        )
         yield "\n".join(logs)

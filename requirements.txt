@@ -10,7 +10,7 @@ SQLAlchemy
 python-dotenv>=1.0.0
 
 # Data & Finance
-yfinance==0.2.36
+yfinance>=1.3.0
 ccxt==4.5.48
 ta==0.11.0
 

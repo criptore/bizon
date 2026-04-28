@@ -1,6 +1,10 @@
+import logging
 import sqlite3
 import pandas as pd
 import os
+
+logger = logging.getLogger("CassandreCache")
+
 
 class SQLiteCache:
     """
@@ -37,7 +41,7 @@ class SQLiteCache:
                 df.index = pd.to_datetime(df.index)
                 return df
         except Exception as e:
-            print(f"⚠️ [Cache SQLite] Erreur lors de la lecture de {table_name}: {e}")
+            logger.debug("[Cache] Erreur lecture %s: %s", table_name, e)
             return None
 
     def save(self, df: pd.DataFrame, ticker: str, interval: str):
@@ -48,4 +52,4 @@ class SQLiteCache:
                 # pandas to_sql gère toute la création de la table 
                 df.to_sql(table_name, conn, if_exists="replace", index=True, index_label="Date")
         except Exception as e:
-            print(f"⚠️ [Cache SQLite] Erreur lors de l'écriture de {table_name}: {e}")
+            logger.debug("[Cache] Erreur ecriture %s: %s", table_name, e)
