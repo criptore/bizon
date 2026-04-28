@@ -26,8 +26,13 @@ class TradingPipeline:
         
         if use_broker:
             self.broker = BinanceBroker()
-            self.broker.connect()
-            self.risk_manager = RiskManager(broker=self.broker)
+            try:
+                self.broker.connect()
+            except Exception as e:
+                logger.warning(f"[Pipeline] Broker indisponible : {e} — mode sans broker.")
+                self.broker = None
+            if self.broker:
+                self.risk_manager = RiskManager(broker=self.broker)
 
         # Suivi de la position
         self.current_position = 0 
