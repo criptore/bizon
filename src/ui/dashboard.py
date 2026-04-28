@@ -77,8 +77,17 @@ from src.engine.pipeline import TradingPipeline
 logger = logging.getLogger("CassandreDashboard")
 
 broker_instance = BinanceBroker()
-broker_connected = broker_instance.connect()
-pipeline_instance = TradingPipeline(use_broker=True)
+try:
+    broker_connected = broker_instance.connect()
+except Exception as _broker_err:
+    logger.warning(f"[Broker] Connexion impossible : {_broker_err} — mode Paper uniquement.")
+    broker_connected = False
+
+try:
+    pipeline_instance = TradingPipeline(use_broker=True)
+except Exception as _pipe_err:
+    logger.warning(f"[Pipeline] Init partielle : {_pipe_err}")
+    pipeline_instance = None
 
 # ── Design tokens ─────────────────────────────────────────────────────────────
 GOLD   = "#C4A35A"
@@ -703,11 +712,16 @@ def _backtest_error_html(msg: str) -> str:
 
 
 def start_bot_ui(ticker: str):
+    if pipeline_instance is None:
+        yield "Pipeline indisponible — clés API Binance non configurées."
+        return
     for log_msg in pipeline_instance.live_trading_loop(symbol=ticker):
         yield log_msg
 
 
 def stop_bot_ui():
+    if pipeline_instance is None:
+        return "Pipeline indisponible."
     pipeline_instance.stop_bot()
     return "Ordre d'arrêt reçu. Le bot s'arrêtera avant la prochaine vérification."
 
@@ -794,8 +808,8 @@ def launch_dashboard(share=False, standalone=True):
                             bot_stop_btn  = gr.Button("Arrêter", variant="stop",    scale=1)
 
                         bot_status_txt = gr.Markdown(
-                            f"<span style='font-family:DM Mono,monospace;font-size:10px;"
-                            f"color:{DARK[\"dim2\"]}'>Statut : "
+                            "<span style='font-family:DM Mono,monospace;font-size:10px;"
+                            f"color:{DARK['dim2']}'>Statut : "
                             f"<span style='color:{RED}'>En veille</span></span>"
                         )
 
@@ -815,7 +829,7 @@ def launch_dashboard(share=False, standalone=True):
                         gr.HTML("<span class='section-label'>Résultats backtest</span>")
                         bt_results = gr.HTML(
                             "<div style='font-family:DM Mono,monospace;font-size:11px;"
-                            f"color:{DARK[\"dim\"]};padding:8px 0'>"
+                            f"color:{DARK['dim']};padding:8px 0'>"
                             "Cliquez sur « Lancer la simulation » pour évaluer la stratégie.</div>"
                         )
 
@@ -843,7 +857,8 @@ def launch_dashboard(share=False, standalone=True):
                         value="1d", label="Intervalle", scale=0, min_width=90
                     )
                     an_refresh = gr.Button("Actualiser", variant="primary", scale=0, min_width=110)
-                    an_status  = gr.Markdown("", scale=1)
+                with gr.Row():
+                    an_status = gr.Markdown("")
 
                 plot_output = gr.Plot(label="", show_label=False)
 
