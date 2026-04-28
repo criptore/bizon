@@ -851,17 +851,19 @@ def scan_basket_ui(basket_name: str):
     return df_display, opps_html, summary_html, gr.update(choices=valid_symbols, value=[])
 
 
-def start_multi_bot_ui(symbols, capital: float = 100.0):
+def start_multi_bot_ui(symbols, capital: float = 100.0, max_cycles: int = 0):
+    _empty_cap = "<div style='font-family:DM Mono,monospace;font-size:12px;color:#6b7280'>En attente...</div>"
     if not symbols:
-        yield "Aucun actif sélectionné. Choisissez des actifs dans la liste après un scan."
+        yield "Aucun actif sélectionné. Choisissez des actifs dans la liste après un scan.", _empty_cap
         return
     if pipeline_instance is None:
-        yield "Pipeline indisponible — clés API Binance non configurées."
+        yield "Pipeline indisponible — clés API Binance non configurées.", _empty_cap
         return
 
     capital = float(capital or 100.0)
+    max_cycles = int(max_cycles or 0)
     if capital < 10:
-        yield "Capital minimum : 10 USDT. Augmentez le montant alloué."
+        yield "Capital minimum : 10 USDT. Augmentez le montant alloué.", _empty_cap
         return
 
     # Vérification du solde disponible avant de démarrer
@@ -872,14 +874,15 @@ def start_multi_bot_ui(symbols, capital: float = 100.0):
                 yield (
                     f"Solde insuffisant : {available:.2f} USDT disponibles, "
                     f"{capital:.2f} USDT requis.\n"
-                    f"Réduisez le capital alloué ou rechargez votre compte."
+                    f"Réduisez le capital alloué ou rechargez votre compte.",
+                    _empty_cap,
                 )
                 return
         except Exception:
-            pass  # Ne pas bloquer si la vérification échoue
+            pass
 
     yield from pipeline_instance.live_multi_trading_loop(
-        symbols=list(symbols), capital=capital
+        symbols=list(symbols), capital=capital, max_cycles=max_cycles
     )
 
 
@@ -1083,6 +1086,14 @@ def launch_dashboard(share=False, standalone=True):
                             info="Montant minimum requis pour démarrer le bot",
                         )
 
+                        auto_cycles = gr.Number(
+                            value=0,
+                            minimum=0,
+                            precision=0,
+                            label="Nombre de cycles (0 = infini)",
+                            info="Le bot s'arrête automatiquement après N cycles",
+                        )
+
                         with gr.Row():
                             auto_start_btn = gr.Button(
                                 "Activer", variant="primary", scale=1
@@ -1125,6 +1136,16 @@ def launch_dashboard(share=False, standalone=True):
                         )
 
                         gr.HTML("<div class='cassandre-divider'></div>")
+                        gr.HTML("<span class='section-label'>Capital de session</span>")
+
+                        _cap_dim = DARK["dim"]
+                        capital_display = gr.HTML(
+                            f"<div style='font-family:DM Mono,monospace;font-size:12px;"
+                            f"color:{_cap_dim};padding:4px 0'>"
+                            f"Démarrez le bot pour voir l'évolution du capital.</div>"
+                        )
+
+                        gr.HTML("<div class='cassandre-divider'></div>")
                         gr.HTML(
                             "<span class='section-label'>"
                             "Journal de trading automatique</span>"
@@ -1149,8 +1170,8 @@ def launch_dashboard(share=False, standalone=True):
                 )
                 auto_start_btn.click(
                     fn=start_multi_bot_ui,
-                    inputs=[auto_symbols_dd, auto_capital],
-                    outputs=[auto_logs],
+                    inputs=[auto_symbols_dd, auto_capital, auto_cycles],
+                    outputs=[auto_logs, capital_display],
                 )
                 auto_stop_btn.click(
                     fn=stop_bot_ui,

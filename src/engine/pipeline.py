@@ -196,34 +196,86 @@ class TradingPipeline:
         logs.append(f"[{datetime.now().strftime('%H:%M:%S')}] 🛑 Bot arrêté par l'utilisateur.")
         yield "\n".join(logs)
 
-    def live_multi_trading_loop(self, symbols: list, capital: float = 100.0):
+    def _get_usdt_balance(self) -> float:
+        if self.broker:
+            try:
+                return float(self.broker.get_balance("USDT"))
+            except Exception:
+                pass
+        return 0.0
+
+    def live_multi_trading_loop(self, symbols: list, capital: float = 100.0, max_cycles: int = 0):
         """
-        Générateur multi-actifs — cycle sur tous les symboles sélectionnés.
-        À chaque cycle, analyse un symbole à la fois en rotation.
-        :param capital: Capital maximum alloué en USDT pour ce portefeuille de bouquet.
+        Générateur multi-actifs.
+        Yields (log_text, capital_html) à chaque étape.
+        :param capital: Capital maximum alloué en USDT.
+        :param max_cycles: Nombre de cycles avant arrêt automatique (0 = infini).
         """
         if not symbols:
-            yield "Aucun actif sélectionné."
+            yield "Aucun actif sélectionné.", ""
             return
 
         n = len(symbols)
         logs = [
-            f"=== 🌐 MODE MULTI-ACTIFS — {n} actif(s) ===",
-            f"    Capital alloué : {capital:.2f} USDT\n",
+            f"=== MODE MULTI-ACTIFS — {n} actif(s) ===",
+            f"    Capital alloué : {capital:.2f} USDT"
+            + (f" | Cycles max : {max_cycles}" if max_cycles > 0 else " | Cycles : infini"),
+            "",
         ]
         self.start_bot()
+
+        # --- Suivi de session ---
+        initial_balance = self._get_usdt_balance() or capital
+        session_buys = 0
+        session_sells = 0
+        cycle_count = 0
+
+        def _capital_html(current: float) -> str:
+            pnl = current - initial_balance
+            pnl_pct = (pnl / initial_balance * 100) if initial_balance > 0 else 0
+            color = "#4ade80" if pnl >= 0 else "#f87171"
+            sign = "+" if pnl >= 0 else ""
+            return (
+                f"<div style='font-family:DM Mono,monospace;font-size:12px;line-height:2'>"
+                f"<b>Capital actuel</b><br>"
+                f"<span style='font-size:20px;color:#f0c040'>{current:.2f} USDT</span><br>"
+                f"<span style='color:{color}'>P&amp;L : {sign}{pnl:.2f} USDT ({sign}{pnl_pct:.1f}%)</span><br>"
+                f"Capital initial : {initial_balance:.2f} USDT<br>"
+                f"Achats : {session_buys} &nbsp;|&nbsp; Ventes : {session_sells} &nbsp;|&nbsp; Cycle : {cycle_count}"
+                f"</div>"
+            )
+
+        def _session_report(current: float) -> str:
+            pnl = current - initial_balance
+            pnl_pct = (pnl / initial_balance * 100) if initial_balance > 0 else 0
+            sign = "+" if pnl >= 0 else ""
+            total_ops = session_buys + session_sells
+            win_rate = (session_sells / total_ops * 100) if total_ops > 0 else 0
+            return (
+                "\n\n═══════════════════════════════\n"
+                f"  RAPPORT DE SESSION\n"
+                f"  Durée      : {cycle_count} cycle(s)\n"
+                f"  Capital    : {initial_balance:.2f} → {current:.2f} USDT\n"
+                f"  P&L        : {sign}{pnl:.2f} USDT ({sign}{pnl_pct:.1f}%)\n"
+                f"  Opérations : {total_ops} (Achats:{session_buys} / Ventes:{session_sells})\n"
+                f"  Win rate   : {win_rate:.0f}%\n"
+                "═══════════════════════════════"
+            )
+
+        current_balance = initial_balance
+        yield "\n".join(logs), _capital_html(current_balance)
 
         while self.is_running:
             # Contrôle du capital restant avant chaque cycle
             if self.broker:
                 try:
-                    available = self.broker.get_balance("USDT")
-                    if available < capital * 0.05:  # < 5 % du capital alloué
+                    current_balance = self._get_usdt_balance()
+                    if current_balance < capital * 0.05:
                         logs.append(
                             f"[{datetime.now().strftime('%H:%M:%S')}]"
-                            f" ⛔ Capital épuisé ({available:.2f} USDT). Bot stoppé."
+                            f" Capital epuise ({current_balance:.2f} USDT). Bot stoppe."
                         )
-                        yield "\n".join(logs)
+                        yield "\n".join(logs), _capital_html(current_balance)
                         self.stop_bot()
                         return
                 except Exception:
@@ -233,39 +285,66 @@ class TradingPipeline:
                 if not self.is_running:
                     break
                 try:
-                    msg, _ = self.run_cycle(
+                    msg, sig = self.run_cycle(
                         symbol=symbol, period="3h", interval="1m",
                         max_capital=capital / len(symbols),
                     )
+                    if sig == "BUY":
+                        session_buys += 1
+                    elif sig == "SELL":
+                        session_sells += 1
+
                     logs.append(msg)
-                    if len(logs) > 18:
-                        logs.pop(2)
-                    yield "\n".join(logs)
+                    if len(logs) > 20:
+                        logs.pop(3)
+
+                    # Rafraîchir le solde toutes les 5 opérations
+                    if (session_buys + session_sells) % 5 == 0 and self.broker:
+                        current_balance = self._get_usdt_balance() or current_balance
+
+                    yield "\n".join(logs), _capital_html(current_balance)
                     for _ in range(2):
                         if not self.is_running:
                             break
                         time.sleep(1)
                 except Exception as exc:
                     logger.error(f"[MultiBot] {symbol} : {exc}")
-                    logs.append(f"❌ [{symbol}] {exc}")
-                    yield "\n".join(logs)
+                    logs.append(f"[ERREUR] [{symbol}] {exc}")
+                    yield "\n".join(logs), _capital_html(current_balance)
                     time.sleep(3)
+
+            cycle_count += 1
+
+            # Arrêt automatique si max_cycles atteint
+            if max_cycles > 0 and cycle_count >= max_cycles:
+                current_balance = self._get_usdt_balance() or current_balance
+                logs.append(
+                    f"[{datetime.now().strftime('%H:%M:%S')}]"
+                    f" {cycle_count}/{max_cycles} cycles completes. Arret automatique."
+                )
+                logs.append(_session_report(current_balance))
+                self.stop_bot()
+                yield "\n".join(logs), _capital_html(current_balance)
+                return
 
             if self.is_running:
                 pause_msg = (
                     f"[{datetime.now().strftime('%H:%M:%S')}]"
-                    f" ⏱ Cycle terminé — prochain dans 10 s…"
+                    f" Cycle {cycle_count} termine — prochain dans 10 s..."
                 )
                 logs.append(pause_msg)
-                if len(logs) > 18:
-                    logs.pop(2)
-                yield "\n".join(logs)
+                if len(logs) > 20:
+                    logs.pop(3)
+                yield "\n".join(logs), _capital_html(current_balance)
                 for _ in range(10):
                     if not self.is_running:
                         break
                     time.sleep(1)
 
+        # Arrêt manuel
+        current_balance = self._get_usdt_balance() or current_balance
         logs.append(
-            f"[{datetime.now().strftime('%H:%M:%S')}] 🛑 Bot multi-actifs arrêté."
+            f"[{datetime.now().strftime('%H:%M:%S')}] Bot multi-actifs arrete."
         )
-        yield "\n".join(logs)
+        logs.append(_session_report(current_balance))
+        yield "\n".join(logs), _capital_html(current_balance)
