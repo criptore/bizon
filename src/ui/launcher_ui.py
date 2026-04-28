@@ -155,7 +155,6 @@ class LauncherUI:
         tk.Label(pad, text="ORACLE DE TRADING ALGORITHMIQUE",
                  font=tkfont.Font(family="Arial", size=9, weight="bold"),
                  fg=GOLD, bg=BG,
-                 letterSpacing=3,   # Tk ignores this, but harmless
                  anchor="w").pack(anchor="w", pady=(2, 10))
 
         # Meander
