@@ -103,8 +103,8 @@ class LauncherUI:
         self._setup_fonts()
         self._build_titlebar()
         self._build_header()
+        self._build_footer()   # footer avant report : sinon expand=True le noie
         self._build_report()
-        self._build_footer()
         threading.Thread(target=self._detect_hardware, daemon=True).start()
 
     def _setup_fonts(self):
@@ -180,7 +180,7 @@ class LauncherUI:
     # ── Footer ─────────────────────────────────────────────────────────────────
     def _build_footer(self):
         footer = tk.Frame(self.root, bg=BG)
-        footer.pack(fill=tk.X, padx=40, pady=(0, 20))
+        footer.pack(side=tk.BOTTOM, fill=tk.X, padx=40, pady=(0, 20))
 
         # Version label (left)
         tk.Label(footer, text="v 1.0.0",
