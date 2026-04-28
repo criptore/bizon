@@ -853,7 +853,7 @@ def launch_dashboard(share=False, standalone=True):
                         value="1y", label="Historique", scale=0, min_width=100
                     )
                     an_interval = gr.Dropdown(
-                        choices=["1d", "1wk"],
+                        choices=["1m", "5m", "15m", "1h", "4h", "1d", "1wk"],
                         value="1d", label="Intervalle", scale=0, min_width=90
                     )
                     an_refresh = gr.Button("Actualiser", variant="primary", scale=0, min_width=110)
@@ -873,15 +873,16 @@ def launch_dashboard(share=False, standalone=True):
                 """)
 
                 # Events – Analyse
+                balance_display = gr.State()
                 an_refresh.click(
                     fn=update_ui,
                     inputs=[an_ticker, an_period, an_interval],
-                    outputs=[plot_output, an_status, gr.State()]
+                    outputs=[plot_output, an_status, balance_display]
                 )
                 demo.load(
                     fn=update_ui,
                     inputs=[an_ticker, an_period, an_interval],
-                    outputs=[plot_output, an_status, gr.State()]
+                    outputs=[plot_output, an_status, balance_display]
                 )
 
             # ── Tab 3 : Paramètres ────────────────────────────────────────────

@@ -88,11 +88,17 @@ class BinanceBroker:
         try:
             logger.info(f"🛒 [Broker] Passage d'ordre {order_type.upper()} {side.upper()} sur {symbol} | Qty: {amount} | Price: {price}")
             
-            # ccxt utilise le format BTC/USDT (avec le slash)
-            formatted_symbol = symbol.replace('-', '/').upper()
-            if '/' not in formatted_symbol and len(formatted_symbol) > 3:
-                # Fallback simple pour BTCUSDT -> BTC/USDT si manquant
-                formatted_symbol = formatted_symbol.replace('USDT', '/USDT')
+            # ccxt utilise le format BTC/USDT — on normalise depuis BTC-USD ou BTCUSDT
+            s = symbol.upper()
+            if '-USD' in s:
+                # BTC-USD → BTC/USDT  (yfinance/dashboard format → Binance)
+                formatted_symbol = s.replace('-USD', '/USDT')
+            elif '/' in s:
+                formatted_symbol = s
+            elif 'USDT' in s:
+                formatted_symbol = s.replace('USDT', '/USDT')
+            else:
+                formatted_symbol = s + '/USDT'
                 
             if order_type.lower() == "market":
                 order = self.exchange.create_market_order(formatted_symbol, side, amount)
