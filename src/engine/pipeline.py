@@ -43,6 +43,12 @@ class TradingPipeline:
         # Statut du bot (Boucle asynchrone)
         self.is_running = False
 
+    @staticmethod
+    def _is_binance_symbol(symbol: str) -> bool:
+        """True si le symbole est tradable sur Binance (crypto uniquement)."""
+        s = symbol.upper()
+        return s.endswith("-USD") or s.endswith("USDT") or s.endswith("BTC") or s.endswith("ETH")
+
     def run_cycle(self, symbol="BTC-USD", interval="15m", period="7d", fast_check_only=False, max_capital: float = None):
         """
         Exécute 1 boucle d'analyse.
@@ -60,7 +66,7 @@ class TradingPipeline:
         log_msg = f"[{timestamp_str}] 🔎 {symbol} @ {current_price:.2f}$"
 
         # --- 2. GESTION ULTRA-RÉACTIVE DU RISQUE (TP/SL) ---
-        if self.current_position == 1 and self.broker and self.risk_manager:
+        if self.current_position == 1 and self.broker and self.risk_manager and self._is_binance_symbol(symbol):
             asset = symbol.replace('-USD', '').replace('USDT', '')
             base_balance = self.broker.get_balance(asset)
             
@@ -96,11 +102,11 @@ class TradingPipeline:
         signal = signal_data.get('signal', 'HOLD')
         price = signal_data.get('price', current_price)
         
-        if self.broker and self.risk_manager:
+        if self.broker and self.risk_manager and self._is_binance_symbol(symbol):
             asset = symbol.replace('-USD', '').replace('USDT', '')
             quote_balance = self.broker.get_balance("USDT")
             base_balance = self.broker.get_balance(asset)
-            
+
             if signal == "BUY" and self.current_position == 0:
                 # Respecter le plafond de capital alloué si défini
                 effective_capital = min(quote_balance, max_capital) if max_capital else quote_balance
@@ -124,8 +130,12 @@ class TradingPipeline:
                 log_msg = f"[{timestamp_str}] 📉 VENTE STRATÉGIQUE exécutée à {price:.2f}$."
                 return log_msg, "SELL"
 
-        if signal == "HOLD" and self.current_position == 0:
-             log_msg = f"[{timestamp_str}] 👁️ Surveillance du marché... Prix: {current_price:.2f}$. Aucun signal."
+        if not self._is_binance_symbol(symbol):
+            # Actif non supporté par Binance : on affiche le signal sans exécuter
+            emoji = {"BUY": "📈", "SELL": "📉"}.get(signal, "👁️")
+            log_msg = f"[{timestamp_str}] {emoji} {symbol} @ {current_price:.4f} | Signal: {signal} (analyse seule — non tradable sur Binance)"
+        elif signal == "HOLD" and self.current_position == 0:
+            log_msg = f"[{timestamp_str}] 👁️ Surveillance du marché... Prix: {current_price:.2f}$. Aucun signal."
 
         return log_msg, signal
 
